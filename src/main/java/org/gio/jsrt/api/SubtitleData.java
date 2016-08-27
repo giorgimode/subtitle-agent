@@ -92,19 +92,18 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      */
     public SubtitleUnit get(int number) {
         // Create a dummy SubtitleUnit object since the comparison is by number only.
-        return info.floor(new SubtitleUnit(number, null, null, new String[]{}));
+        return info.floor(new SubtitleUnit(number, 0, 0, new String[]{}));
     }
 
     /**
      * Gets the SubtitleUnit object from a given number.
      *
-     * @param startTimeInMs the subtitle start time
+     * @param startTime the subtitle start time
      * @return the SubtitleUnit object
      */
-    public SubtitleUnit get(long startTimeInMs) {
-        Date startTime  =new Date(startTimeInMs);
+    public SubtitleUnit get(long startTime) {
         // Create a dummy SubtitleUnit object since the comparison is by number only.
-        return info.tailSet(new SubtitleUnit(0, startTime, null, new String[]{})).first();
+        return info.tailSet(new SubtitleUnit(0, startTime, 0, new String[]{})).first();
     }
     
     /**
@@ -124,7 +123,7 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @return true if the subtitle number is in the SubtitleData; false otherwise
      */
     public boolean contains(int number) {
-        return info.contains(new SubtitleUnit(number, null, null, new String[]{}));
+        return info.contains(new SubtitleUnit(number, 0, 0, new String[]{}));
     }
     
     /**

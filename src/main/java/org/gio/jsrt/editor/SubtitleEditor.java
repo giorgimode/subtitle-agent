@@ -2,15 +2,18 @@ package org.gio.jsrt.editor;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import org.gio.jsrt.api.SRTTime;
 import org.gio.jsrt.api.SubtitleUnit;
 import org.gio.jsrt.api.SubtitleData;
 import org.gio.jsrt.api.SubtitleTimeFormat;
 import org.gio.jsrt.exception.SubtitleEditorException;
 import org.gio.jsrt.util.StringUtils;
+
+import static org.gio.jsrt.api.SubtitleTimeFormat.toSRTTime;
+import static org.gio.jsrt.api.SubtitleTimeFormat.fromSRTTime;
 
 /**
  * This class performs high-level operations related to editing SubtitleUnit.
@@ -61,30 +64,31 @@ public class SubtitleEditor {
      * @return the new SubtitleUnit object
      */
     static SubtitleUnit setTime(SubtitleUnit subtitleUnit, SubtitleTimeFormat.Type type, int value) {
-        return new SubtitleUnit(subtitleUnit.number, newDate(subtitleUnit.startTime, type, value),
-            newDate(subtitleUnit.endTime, type, value), subtitleUnit.text);
+        return new SubtitleUnit(subtitleUnit.number, newTime(subtitleUnit.startTime, type, value),
+            newTime(subtitleUnit.endTime, type, value), subtitleUnit.text);
     }
     
-    private static Date newDate(Date oldDate, SubtitleTimeFormat.Type type, int value) {
-        Calendar newCal = Calendar.getInstance();
-        newCal.setTime(oldDate);
+    private static long newTime(long oldTime, SubtitleTimeFormat.Type type, int value) {
+        SRTTime srtTime = toSRTTime(oldTime);
+
         switch (type) {
         case HOUR:
-            newCal.add(Calendar.HOUR_OF_DAY, value);
+            srtTime.setHour(value);
             break;
         case MINUTE:
-            newCal.add(Calendar.MINUTE, value);
+            srtTime.setMinute(value);
             break;
         case SECOND:
-            newCal.add(Calendar.SECOND, value);
+            srtTime.setSecond(value);
             break;
         case MILLISECOND:
-            newCal.add(Calendar.MILLISECOND, value);
+            srtTime.setMillisecond(value);
             break;
         }
-        return newCal.getTime();
+
+        return fromSRTTime(srtTime);
     }
-    
+
     /**
      * Updates a subtitle text according to the width given.
      * 

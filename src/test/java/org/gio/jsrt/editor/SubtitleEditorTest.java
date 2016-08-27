@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class SubtitleEditorTest {
 
-    @Test
+  /*  @Test
     public void testSetTime() throws Exception {
         SubtitleUnit oldSubtitleUnit = new SubtitleUnit(1, SubtitleTimeFormat.parse("00:00:24,600"),
             SubtitleTimeFormat.parse("00:00:26,600"), "Hello World");
@@ -360,5 +360,5 @@ public class SubtitleEditorTest {
         
         SubtitleUnit s = subtitleData.get(2);
         assertEquals("test", StringUtils.join(s.text, ""));
-    }
+    }*/
 }

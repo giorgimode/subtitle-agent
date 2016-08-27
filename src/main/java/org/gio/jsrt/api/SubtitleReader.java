@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,7 +76,7 @@ public class SubtitleReader {
             throw new InvalidSubtitleLineException(
                 tString + " needs to be seperated with " + SubtitleTimeFormat.TIME_DELIMITER);
         }
-        Date startTime = null;
+        long startTime;
         try {
             startTime = SubtitleTimeFormat.parse(times[0]);
         } catch (ParseException e) {
@@ -85,7 +84,7 @@ public class SubtitleReader {
                 times[0] + " has an invalid time format");
         }
         
-        Date endTime = null;
+        long endTime;
         try {
             endTime = SubtitleTimeFormat.parse(times[1]);
         } catch (ParseException e) {

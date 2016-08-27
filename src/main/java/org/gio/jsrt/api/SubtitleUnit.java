@@ -12,40 +12,40 @@ import java.util.List;
  */
 public class SubtitleUnit implements Comparable<SubtitleUnit> {
     public final int number;
-    public final Date startTime;
-    public final Date endTime;
+    public final long startTime;
+    public final long endTime;
     public final List<String> text;
-    
+
     /**
      * Creates a new instance of SubtitleUnit.
-     * 
+     *
      * @param number the subtitle number
      * @param startTime the start time
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public SubtitleUnit(int number, Date startTime, Date endTime, String... text) {
+    public SubtitleUnit(int number, long startTime, long endTime, String... text) {
         this.number = number;
         this.startTime = startTime;
         this.endTime = endTime;
         this.text = new ArrayList<>(Arrays.asList(text));
     }
-    
+
     /**
      * Creates a new instance of SubtitleUnit.
-     * 
+     *
      * @param number the subtitle number
      * @param startTime the start time
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public SubtitleUnit(int number, Date startTime, Date endTime, List<String> text) {
+    public SubtitleUnit(int number, long startTime, long endTime, List<String> text) {
         this.number = number;
         this.startTime = startTime;
         this.endTime = endTime;
         this.text = new ArrayList<>(text);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -79,8 +79,8 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      */
     @Override
     public int compareTo(SubtitleUnit o) {
-        if (o.startTime != null) {
-            return  startTime.compareTo(o.startTime);
+        if (o.startTime > 0) {
+            return  Long.valueOf(startTime).compareTo(o.startTime);
         }
         if (o.number > 0 ) {
             return  new Integer(number).compareTo(o.number);

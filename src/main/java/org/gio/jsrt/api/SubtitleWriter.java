@@ -5,6 +5,7 @@ import org.gio.jsrt.exception.SubtitleWriterException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 
 /**
  * This class is responsible for writing an SubtitleUnit file.
@@ -22,7 +23,7 @@ public class SubtitleWriter {
      * @param subtitleData the SubtitleData object
      * @throws SubtitleWriterException thrown while writing an SubtitleUnit file
      */
-    public static void write(File srtFile, SubtitleData subtitleData) throws SubtitleWriterException {
+    public static void write(File srtFile, SubtitleData subtitleData) throws SubtitleWriterException, ParseException {
         try (PrintWriter pw = new PrintWriter(srtFile)) {
             for (SubtitleUnit subtitleUnit : subtitleData) {
                 pw.println(subtitleUnit.number);
