@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.gio.submaster.api.SubtitleUnit;
 import org.gio.submaster.api.SubtitleData;
 import org.gio.submaster.api.SubtitleReader;
-import org.gio.submaster.api.SubtitleTimeFormat;
+import org.gio.submaster.api.SubtitleFormatter;
 import org.gio.submaster.api.SubtitleWriter;
 import org.gio.submaster.editor.SubtitleEditor;
 
@@ -43,7 +43,7 @@ public class Main {
     private static void testEdit() throws ParseException {
         SubtitleData info = SubtitleReader.read(new File("in.srt"));
         SubtitleEditor.updateText(info, 1, 10);
-        SubtitleEditor.updateTime(info, 1, SubtitleTimeFormat.Type.MILLISECOND, 100);
+        SubtitleEditor.updateTime(info, 1, SubtitleFormatter.Type.MILLISECOND, 100);
         SubtitleEditor.prependSubtitle(info, "00:00:05,000", "00:00:07,000",
             Arrays.asList("Test"));
         SubtitleEditor.appendSubtitle(info, "00:01:05,000", "00:01:07,000",

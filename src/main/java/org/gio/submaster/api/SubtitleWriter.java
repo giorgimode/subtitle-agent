@@ -29,7 +29,7 @@ public class SubtitleWriter {
                 pw.println(subtitleUnit.number);
                 pw.println(
                     subtitleUnit.startTime.toString() +
-                    SubtitleTimeFormat.TIME_DELIMITER +
+                    SubtitleFormatter.TIME_DELIMITER +
                     subtitleUnit.endTime.toString());
                 for (String text : subtitleUnit.text) {
                     pw.println(text);

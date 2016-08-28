@@ -7,10 +7,10 @@ public class SRTTime implements Comparable<SRTTime>{
         private long millisecond;
 
         public SRTTime(long hour, long minute, long second, long millisecond) {
-            this.setHour(hour);
-            this.setMinute(minute);
-            this.setSecond(second);
-            this.setMillisecond(millisecond);
+            this.updateHour(hour);
+            this.updateMinute(minute);
+            this.updateSecond(second);
+            this.updateMillisecond(millisecond);
         }
 
     public long getHour() {
@@ -29,20 +29,20 @@ public class SRTTime implements Comparable<SRTTime>{
         return millisecond;
     }
 
-    public void setHour(long hour) {
-        this.hour = hour;
+    public void updateHour(long hour) {
+        this.hour += hour;
     }
 
-    public void setMinute(long minute) {
-        this.minute = minute;
+    public void updateMinute(long minute) {
+        this.minute += minute;
     }
 
-    public void setSecond(long second) {
-        this.second = second;
+    public void updateSecond(long second) {
+        this.second += second;
     }
 
-    public void setMillisecond(long millisecond) {
-        this.millisecond = millisecond;
+    public void updateMillisecond(long millisecond) {
+        this.millisecond += millisecond;
     }
 
     @Override

@@ -68,14 +68,14 @@ public class SubtitleReader {
             throw new InvalidSubtitleLineException(
                 "Start time and end time information is not present");
         }
-        String[] times = tString.split(SubtitleTimeFormat.TIME_DELIMITER);
+        String[] times = tString.split(SubtitleFormatter.TIME_DELIMITER);
         if (times.length != 2) {
             throw new InvalidSubtitleLineException(
-                tString + " needs to be seperated with " + SubtitleTimeFormat.TIME_DELIMITER);
+                tString + " needs to be seperated with " + SubtitleFormatter.TIME_DELIMITER);
         }
         SRTTime startTime;
         try {
-            startTime = SubtitleTimeFormat.parse(times[0]);
+            startTime = SubtitleFormatter.stringToSrt(times[0]);
         } catch (ParseException e) {
             throw new InvalidSubtitleLineException(
                 times[0] + " has an invalid time format");
@@ -83,7 +83,7 @@ public class SubtitleReader {
 
         SRTTime endTime = null;
         try {
-            endTime = SubtitleTimeFormat.parse(times[1]);
+            endTime = SubtitleFormatter.stringToSrt(times[1]);
         } catch (ParseException e) {
             throw new InvalidSubtitleLineException(
                 times[1] + " has an invalid time format");

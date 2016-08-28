@@ -18,10 +18,10 @@ public class SubtitleWriterTest {
     @Test
     public void testWrite() throws Exception {
         SubtitleData inInfo = new SubtitleData();
-        inInfo.add(new SubtitleUnit(2, SubtitleTimeFormat.parse("00:00:24,600"),
-                SubtitleTimeFormat.parse("00:00:27,800"), "Foo Bar", "Bar Foo"));
-        inInfo.add(new SubtitleUnit(1, SubtitleTimeFormat.parse("00:00:20,000"),
-            SubtitleTimeFormat.parse("00:00:24,400"), "Hello World", "Bye World"));
+        inInfo.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                SubtitleFormatter.stringToSrt("00:00:27,800"), "Foo Bar", "Bar Foo"));
+        inInfo.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:20,000"),
+            SubtitleFormatter.stringToSrt("00:00:24,400"), "Hello World", "Bye World"));
             
         File srtFile = new File("src/test/resources/test1.srt");
         SubtitleWriter.write(srtFile, inInfo);

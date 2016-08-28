@@ -2,7 +2,7 @@ package org.gio.submaster.editor;
 
 import org.gio.submaster.api.SRTTime;
 import org.gio.submaster.api.SubtitleData;
-import org.gio.submaster.api.SubtitleTimeFormat;
+import org.gio.submaster.api.SubtitleFormatter;
 import org.gio.submaster.api.SubtitleUnit;
 import org.gio.submaster.exception.SubtitleEditorException;
 import org.gio.submaster.util.StringUtils;
@@ -30,7 +30,7 @@ public class SubtitleEditor {
      * @param value the time value
      */
     public static void updateTime(SubtitleData info, int subtitleNumber,
-                                  SubtitleTimeFormat.Type type, int value) {
+                                  SubtitleFormatter.Type type, int value) {
         if (!info.contains(subtitleNumber)) {
             throw new SubtitleEditorException(subtitleNumber + " could not be found");
         }
@@ -42,10 +42,10 @@ public class SubtitleEditor {
      * update both start time and end time.
      * 
      * @param info the SubtitleData object
-     * @param type the SubtitleUnit time format object
+     * @param type the SubtitleUnit time object
      * @param value the time value
      */
-    public static void updateTimes(SubtitleData info, SubtitleTimeFormat.Type type, int value) {
+    public static void updateTimes(SubtitleData info, SubtitleFormatter.Type type, int value) {
         for (int i = 1; i <= info.size(); i++) {
             updateTime(info, info.get(i).number, type, value);
         }
@@ -55,28 +55,28 @@ public class SubtitleEditor {
      * Creates a new SubtitleUnit.
      * 
      * @param subtitleUnit the SubtitleUnit object
-     * @param type the SubtitleTimeFormat
+     * @param type the SubtitleFormatter
      * @param value the time value
      * @return the new SubtitleUnit object
      */
-    static SubtitleUnit setTime(SubtitleUnit subtitleUnit, SubtitleTimeFormat.Type type, int value) {
+    static SubtitleUnit setTime(SubtitleUnit subtitleUnit, SubtitleFormatter.Type type, int value) {
         return new SubtitleUnit(subtitleUnit.number, newTime(subtitleUnit.startTime, type, value),
             newTime(subtitleUnit.endTime, type, value), subtitleUnit.text);
     }
     
-    private static SRTTime newTime(SRTTime oldTime, SubtitleTimeFormat.Type type, int value) {
+    private static SRTTime newTime(SRTTime oldTime, SubtitleFormatter.Type type, int value) {
         switch (type) {
         case HOUR:
-            oldTime.setHour(value);
+            oldTime.updateHour(value);
             break;
         case MINUTE:
-            oldTime.setMinute(value);
+            oldTime.updateMinute(value);
             break;
         case SECOND:
-            oldTime.setSecond(value);
+            oldTime.updateSecond(value);
             break;
         case MILLISECOND:
-            oldTime.setMillisecond(value);
+            oldTime.updateMillisecond(value);
             break;
         }
 
@@ -153,8 +153,8 @@ public class SubtitleEditor {
         try {
             SubtitleUnit newSubtitleUnit = new SubtitleUnit(
                 info.size() + 1,
-                SubtitleTimeFormat.parse(startTime),
-                SubtitleTimeFormat.parse(endTime),
+                SubtitleFormatter.stringToSrt(startTime),
+                SubtitleFormatter.stringToSrt(endTime),
                 text);
             info.add(newSubtitleUnit);
         } catch (ParseException e) {
@@ -201,8 +201,8 @@ public class SubtitleEditor {
         }
         
         try {
-            info.add(new SubtitleUnit(subtitleNumber, SubtitleTimeFormat.parse(startTime),
-                SubtitleTimeFormat.parse(endTime), text));
+            info.add(new SubtitleUnit(subtitleNumber, SubtitleFormatter.stringToSrt(startTime),
+                SubtitleFormatter.stringToSrt(endTime), text));
         } catch (ParseException e) {
             throw new SubtitleEditorException(e);
         }
