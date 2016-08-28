@@ -1,7 +1,7 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
-import org.gio.jsrt.exception.InvalidSubtitleLineException;
-import org.gio.jsrt.exception.SubtitleReaderException;
+import org.gio.submaster.exception.InvalidSubtitleLineException;
+import org.gio.submaster.exception.SubtitleReaderException;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
@@ -18,9 +18,6 @@ import java.util.List;
  *
  */
 public class SubtitleReader {
-    public SubtitleReader() {
-    }
-    
     /**
      * Reads a srt file and transforms it into SubtitleUnit object.
      * 
@@ -76,15 +73,15 @@ public class SubtitleReader {
             throw new InvalidSubtitleLineException(
                 tString + " needs to be seperated with " + SubtitleTimeFormat.TIME_DELIMITER);
         }
-        long startTime;
+        SRTTime startTime;
         try {
             startTime = SubtitleTimeFormat.parse(times[0]);
         } catch (ParseException e) {
             throw new InvalidSubtitleLineException(
                 times[0] + " has an invalid time format");
         }
-        
-        long endTime;
+
+        SRTTime endTime = null;
         try {
             endTime = SubtitleTimeFormat.parse(times[1]);
         } catch (ParseException e) {

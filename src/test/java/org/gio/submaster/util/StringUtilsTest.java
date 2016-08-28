@@ -1,4 +1,4 @@
-package org.gio.jsrt.util;
+package org.gio.submaster.util;
 
 import static org.junit.Assert.*;
 

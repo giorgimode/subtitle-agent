@@ -1,8 +1,7 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,8 +11,8 @@ import java.util.List;
  */
 public class SubtitleUnit implements Comparable<SubtitleUnit> {
     public final int number;
-    public final long startTime;
-    public final long endTime;
+    public final SRTTime startTime;
+    public final SRTTime endTime;
     public final List<String> text;
 
     /**
@@ -24,7 +23,7 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public SubtitleUnit(int number, long startTime, long endTime, String... text) {
+    public SubtitleUnit(int number, SRTTime startTime, SRTTime endTime, String... text) {
         this.number = number;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -39,7 +38,7 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public SubtitleUnit(int number, long startTime, long endTime, List<String> text) {
+    public SubtitleUnit(int number, SRTTime startTime, SRTTime endTime, List<String> text) {
         this.number = number;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -79,13 +78,11 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      */
     @Override
     public int compareTo(SubtitleUnit o) {
-        if (o.startTime > 0) {
-            return  Long.valueOf(startTime).compareTo(o.startTime);
+        if (startTime != null && o.startTime != null) {
+            return startTime.compareTo(o.startTime);
         }
-        if (o.number > 0 ) {
-            return  new Integer(number).compareTo(o.number);
-        }
-        return 0;
+
+        return  new Integer(number).compareTo(o.number);
     }
 
     @Override

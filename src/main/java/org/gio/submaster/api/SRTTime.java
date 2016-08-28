@@ -1,6 +1,6 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
-public class SRTTime {
+public class SRTTime implements Comparable<SRTTime>{
         private long hour;
         private long minute;
         private long second;
@@ -63,12 +63,31 @@ public class SRTTime {
         }
         timeStr.append(Long.toString(getSecond()));
         timeStr.append(",");
-        if (getSecond() < 10) {
+        if (getMillisecond() < 10) {
             timeStr.append("00");
-        } else if (getSecond() < 100) {
+        } else if (getMillisecond() < 100) {
             timeStr.append("0");
         }
         timeStr.append(Long.toString(getMillisecond()));
         return timeStr.toString();
+    }
+
+    @Override
+    public int compareTo(SRTTime o){
+        if (getHour() > o.getHour()) return 1;
+        else if (getHour() < o.getHour()) return -1;
+        else {
+            if (getMinute() > o.getMinute()) return 1;
+            else if (getMinute() < o.getMinute()) return -1;
+            else {
+                if (getSecond() > o.getSecond()) return 1;
+                else if (getSecond() < o.getSecond()) return -1;
+                else {
+                    if (getMillisecond() > o.getMillisecond()) return 1;
+                    else if (getMillisecond() < o.getMillisecond()) return -1;
+                    else return 0;
+                }
+            }
+        }
     }
 }

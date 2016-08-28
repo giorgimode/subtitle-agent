@@ -1,4 +1,4 @@
-package org.gio.jsrt.exception;
+package org.gio.submaster.exception;
 
 /**
  * An exception while writing an SubtitleUnit file.

@@ -1,32 +1,30 @@
-package org.gio.jsrt.exception;
+package org.gio.submaster.exception;
 
 /**
- * An exception while reading an SubtitleUnit file.
- * 
  *
  */
-public class SubtitleReaderException extends SubtitleException {
+public class SubtitleEditorException extends SubtitleException {
     private static final long serialVersionUID = 1L;
 
     /**
      * @param message the exception message
      * @param cause the cause
      */
-    public SubtitleReaderException(String message, Throwable cause) {
+    public SubtitleEditorException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
      * @param message the exception message
      */
-    public SubtitleReaderException(String message) {
+    public SubtitleEditorException(String message) {
         super(message);
     }
 
     /**
      * @param cause the cause
      */
-    public SubtitleReaderException(Throwable cause) {
+    public SubtitleEditorException(Throwable cause) {
         super(cause);
     }
 }

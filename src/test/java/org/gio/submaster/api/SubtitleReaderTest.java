@@ -1,12 +1,12 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.Iterator;
 
-import org.gio.jsrt.exception.InvalidSubtitleLineException;
-import org.gio.jsrt.exception.SubtitleReaderException;
+import org.gio.submaster.exception.InvalidSubtitleLineException;
+import org.gio.submaster.exception.SubtitleReaderException;
 import org.junit.Test;
 
 /**
@@ -16,21 +16,21 @@ public class SubtitleReaderTest {
 
    @Test
    public void testRead() throws Exception {
-       SubtitleData info = SubtitleReader.read(new File("src/test/resources/good1.srt"));
+       SubtitleData subtitleData = SubtitleReader.read(new File("src/test/resources/good1.srt"));
        
-       assertEquals(2, info.size());
-       Iterator<SubtitleUnit> iter = info.iterator();
+       assertEquals(2, subtitleData.size());
+       Iterator<SubtitleUnit> iter = subtitleData.iterator();
        SubtitleUnit subtitleUnit = iter.next();
        assertEquals(1, subtitleUnit.number);
        assertEquals("Hello World", subtitleUnit.text.get(0));
-       assertEquals("00:00:20,000", SubtitleTimeFormat.format(subtitleUnit.startTime));
-       assertEquals("00:00:24,400", SubtitleTimeFormat.format(subtitleUnit.endTime));
+       assertEquals("00:00:20,000", subtitleUnit.startTime.toString());
+       assertEquals("00:00:24,400", subtitleUnit.endTime.toString());
        assertEquals("Bye World", subtitleUnit.text.get(1));
        
        subtitleUnit = iter.next();
        assertEquals(2, subtitleUnit.number);
-       assertEquals("00:00:24,600", SubtitleTimeFormat.format(subtitleUnit.startTime));
-       assertEquals("00:00:27,800", SubtitleTimeFormat.format(subtitleUnit.endTime));
+       assertEquals("00:00:24,600", subtitleUnit.startTime.toString());
+       assertEquals("00:00:27,800", subtitleUnit.endTime.toString());
        assertEquals("Foo Bar", subtitleUnit.text.get(0));
        assertEquals("Bar Foo", subtitleUnit.text.get(1));
    }
@@ -39,16 +39,32 @@ public class SubtitleReaderTest {
     public void testReadByTime() throws Exception {
         SubtitleData info = SubtitleReader.read(new File("src/test/resources/good2.srt"));
 
-        assertEquals(464, info.size());
-/*
+        assertEquals(772, info.size());
+
         Iterator<SubtitleUnit> iter = info.iterator();
         SubtitleUnit subtitleUnit = iter.next();
         assertEquals(1, subtitleUnit.number);
-        assertEquals("Hello World", subtitleUnit.text.get(0));
-        assertEquals("00:00:20,000", SubtitleTimeFormat.format(subtitleUnit.startTime));
-        assertEquals("00:00:24,400", SubtitleTimeFormat.format(subtitleUnit.endTime));
-        assertEquals("Bye World", subtitleUnit.text.get(1));
-*/
+        assertEquals("Freeman: Inside your head", subtitleUnit.text.get(0));
+        assertEquals("is an unexplored world.", subtitleUnit.text.get(1));
+        assertEquals("00:00:02,094", subtitleUnit.startTime.toString());
+        assertEquals("00:00:06,864", subtitleUnit.endTime.toString());
+
+        // long value must not be mixed with integer value
+        subtitleUnit = info.get(446336L);
+        assertEquals(121, subtitleUnit.number);
+        assertEquals("So when you look down, you don't", subtitleUnit.text.get(0));
+        assertEquals("see your own body anymore.", subtitleUnit.text.get(1));
+        assertEquals("00:07:25,960", subtitleUnit.startTime.toString());
+        assertEquals("00:07:28,761", subtitleUnit.endTime.toString());
+
+        // long value must not be mixed with integer value
+        SRTTime srtTime = new SRTTime(0, 20, 43, 900);
+        subtitleUnit = info.get(srtTime);
+        assertEquals(384, subtitleUnit.number);
+        assertEquals("Like, I could see either", subtitleUnit.text.get(0));
+        assertEquals("yours as background story,", subtitleUnit.text.get(1));
+        assertEquals("00:20:42,855", subtitleUnit.startTime.toString());
+        assertEquals("00:20:45,556", subtitleUnit.endTime.toString());
 
     }
 

@@ -1,19 +1,15 @@
-package org.gio.jsrt.editor;
+package org.gio.submaster.editor;
+
+import org.gio.submaster.api.SRTTime;
+import org.gio.submaster.api.SubtitleData;
+import org.gio.submaster.api.SubtitleTimeFormat;
+import org.gio.submaster.api.SubtitleUnit;
+import org.gio.submaster.exception.SubtitleEditorException;
+import org.gio.submaster.util.StringUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.gio.jsrt.api.SRTTime;
-import org.gio.jsrt.api.SubtitleUnit;
-import org.gio.jsrt.api.SubtitleData;
-import org.gio.jsrt.api.SubtitleTimeFormat;
-import org.gio.jsrt.exception.SubtitleEditorException;
-import org.gio.jsrt.util.StringUtils;
-
-import static org.gio.jsrt.api.SubtitleTimeFormat.toSRTTime;
-import static org.gio.jsrt.api.SubtitleTimeFormat.fromSRTTime;
 
 /**
  * This class performs high-level operations related to editing SubtitleUnit.
@@ -68,25 +64,23 @@ public class SubtitleEditor {
             newTime(subtitleUnit.endTime, type, value), subtitleUnit.text);
     }
     
-    private static long newTime(long oldTime, SubtitleTimeFormat.Type type, int value) {
-        SRTTime srtTime = toSRTTime(oldTime);
-
+    private static SRTTime newTime(SRTTime oldTime, SubtitleTimeFormat.Type type, int value) {
         switch (type) {
         case HOUR:
-            srtTime.setHour(value);
+            oldTime.setHour(value);
             break;
         case MINUTE:
-            srtTime.setMinute(value);
+            oldTime.setMinute(value);
             break;
         case SECOND:
-            srtTime.setSecond(value);
+            oldTime.setSecond(value);
             break;
         case MILLISECOND:
-            srtTime.setMillisecond(value);
+            oldTime.setMillisecond(value);
             break;
         }
 
-        return fromSRTTime(srtTime);
+        return oldTime;
     }
 
     /**

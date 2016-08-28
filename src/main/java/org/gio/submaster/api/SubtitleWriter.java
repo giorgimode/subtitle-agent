@@ -1,6 +1,6 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
-import org.gio.jsrt.exception.SubtitleWriterException;
+import org.gio.submaster.exception.SubtitleWriterException;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +28,9 @@ public class SubtitleWriter {
             for (SubtitleUnit subtitleUnit : subtitleData) {
                 pw.println(subtitleUnit.number);
                 pw.println(
-                    SubtitleTimeFormat.format(subtitleUnit.startTime) +
+                    subtitleUnit.startTime.toString() +
                     SubtitleTimeFormat.TIME_DELIMITER +
-                    SubtitleTimeFormat.format(subtitleUnit.endTime));
+                    subtitleUnit.endTime.toString());
                 for (String text : subtitleUnit.text) {
                     pw.println(text);
                 }

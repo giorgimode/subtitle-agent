@@ -1,23 +1,22 @@
-package org.gio.jsrt;
+package org.gio.submaster;
 
 import java.io.File;
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.Date;
 
-import org.gio.jsrt.api.SubtitleUnit;
-import org.gio.jsrt.api.SubtitleData;
-import org.gio.jsrt.api.SubtitleReader;
-import org.gio.jsrt.api.SubtitleTimeFormat;
-import org.gio.jsrt.api.SubtitleWriter;
-import org.gio.jsrt.editor.SubtitleEditor;
+import org.gio.submaster.api.SubtitleUnit;
+import org.gio.submaster.api.SubtitleData;
+import org.gio.submaster.api.SubtitleReader;
+import org.gio.submaster.api.SubtitleTimeFormat;
+import org.gio.submaster.api.SubtitleWriter;
+import org.gio.submaster.editor.SubtitleEditor;
 
 public class Main {
     private static void print(SubtitleData info) throws ParseException {
         for (SubtitleUnit s : info) {
             System.out.println("Number: " + s.number);
-            System.out.println("Start time: " + SubtitleTimeFormat.format(s.startTime));
-            System.out.println("End time: " + SubtitleTimeFormat.format(s.endTime));
+            System.out.println("Start time: " + s.startTime);
+            System.out.println("End time: " + s.endTime);
             System.out.println("Texts:");
             for (String line : s.text) {
                 System.out.println("    " + line);
@@ -33,8 +32,8 @@ public class Main {
     
     private static void testWrite() throws ParseException {
         SubtitleData info = new SubtitleData();
-        info.add(new SubtitleUnit(1, 0, 0, "Hello", "World"));
-        info.add(new SubtitleUnit(2, 0, 0, "Bye", "World"));
+        info.add(new SubtitleUnit(1, null, null, "Hello", "World"));
+        info.add(new SubtitleUnit(2, null, null, "Bye", "World"));
         
         File f = new File("out1.srt");
         f.deleteOnExit();

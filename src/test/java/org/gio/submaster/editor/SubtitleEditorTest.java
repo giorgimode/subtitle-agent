@@ -1,16 +1,4 @@
-package org.gio.jsrt.editor;
-
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Date;
-
-import org.gio.jsrt.api.SubtitleUnit;
-import org.gio.jsrt.api.SubtitleData;
-import org.gio.jsrt.api.SubtitleTimeFormat;
-import org.gio.jsrt.exception.SubtitleEditorException;
-import org.gio.jsrt.util.StringUtils;
-import org.junit.Test;
+package org.gio.submaster.editor;
 
 /**
  *

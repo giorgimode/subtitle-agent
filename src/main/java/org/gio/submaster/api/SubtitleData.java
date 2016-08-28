@@ -1,10 +1,11 @@
-package org.gio.jsrt.api;
+package org.gio.submaster.api;
 
-import java.util.Date;
+import org.gio.submaster.editor.SubtitleEditor;
+
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.gio.jsrt.editor.SubtitleEditor;
+import static org.gio.submaster.api.SubtitleTimeFormat.toSRTTime;
 
 /**
  * This class stores collections of SubtitleUnit objects.
@@ -68,9 +69,6 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @param subtitleUnit the SubtitleUnit object to be removed from SubtitleData
      */
     public void remove(SubtitleUnit subtitleUnit) {
-        // Set.remove() will check if the object is present in the Set, so
-        // there is no need to do another check if the object is present in
-        // the set
         info.remove(subtitleUnit);
     }
     
@@ -91,8 +89,8 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @return the SubtitleUnit object
      */
     public SubtitleUnit get(int number) {
-        // Create a dummy SubtitleUnit object since the comparison is by number only.
-        return info.floor(new SubtitleUnit(number, 0, 0, new String[]{}));
+        // Create a dummy SubtitleUnit object since the comparison is by number or by startTime.
+        return info.floor(new SubtitleUnit(number, null, null, new String[]{}));
     }
 
     /**
@@ -101,9 +99,15 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @param startTime the subtitle start time
      * @return the SubtitleUnit object
      */
-    public SubtitleUnit get(long startTime) {
+    public SubtitleUnit get(SRTTime startTime) {
         // Create a dummy SubtitleUnit object since the comparison is by number only.
-        return info.tailSet(new SubtitleUnit(0, startTime, 0, new String[]{})).first();
+        return info.floor(new SubtitleUnit(0, startTime, null, new String[]{}));
+    }
+
+    public SubtitleUnit get(long timestamp) {
+        SRTTime srtTime = toSRTTime(timestamp);
+        // Create a dummy SubtitleUnit object since the comparison is by number only.
+        return info.floor(new SubtitleUnit(0, srtTime, null, new String[]{}));
     }
     
     /**
@@ -113,7 +117,7 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @return the SubtitleUnit object
      */
     public SubtitleUnit get(SubtitleUnit subtitleUnit) {
-        return info.tailSet(subtitleUnit).first();
+        return info.floor(subtitleUnit);
     }
     
     /**
@@ -123,7 +127,7 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      * @return true if the subtitle number is in the SubtitleData; false otherwise
      */
     public boolean contains(int number) {
-        return info.contains(new SubtitleUnit(number, 0, 0, new String[]{}));
+        return info.contains(new SubtitleUnit(number, null, null, new String[]{}));
     }
     
     /**

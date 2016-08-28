@@ -1,32 +1,32 @@
-package org.gio.jsrt.exception;
+package org.gio.submaster.exception;
 
 /**
- * Any exceptions related to SubtitleUnit.
+ * An exception for an invalid SubtitleUnit format.
  * 
  *
  */
-public class SubtitleException extends RuntimeException {
+public class InvalidSubtitleLineException extends SubtitleException {
     private static final long serialVersionUID = 1L;
 
     /**
      * @param message the exception message
      * @param cause the cause
      */
-    public SubtitleException(String message, Throwable cause) {
+    public InvalidSubtitleLineException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
      * @param message the exception message
      */
-    public SubtitleException(String message) {
+    public InvalidSubtitleLineException(String message) {
         super(message);
     }
 
     /**
      * @param cause the cause
      */
-    public SubtitleException(Throwable cause) {
+    public InvalidSubtitleLineException(Throwable cause) {
         super(cause);
     }
 }
