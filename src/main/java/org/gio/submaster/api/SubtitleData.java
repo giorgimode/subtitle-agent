@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import static org.gio.submaster.api.SubtitleFormatter.longToSrt;
+import static org.gio.submaster.util.StringUtils.convertSubtitleUnit;
 
 /**
  * This class stores collections of SubtitleUnit objects.
@@ -109,7 +110,12 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
         // Create a dummy SubtitleUnit object since the comparison is by number only.
         return info.floor(new SubtitleUnit(0, srtTime, null, new String[]{}));
     }
-    
+
+    public String[][] getCurrentWords(long timestamp) {
+        SubtitleUnit subtitleUnit = get(timestamp);
+        return convertSubtitleUnit(subtitleUnit);
+    }
+
     /**
      * Gets the SubtitleUnit object.
      * 
