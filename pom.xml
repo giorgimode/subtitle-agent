@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.gio.submaster</groupId>
-    <artifactId>subtitle-master</artifactId>
+    <groupId>com.giorgimode</groupId>
+    <artifactId>subtitle</artifactId>
     <version>1.0.0</version>
 
     <dependencies>
