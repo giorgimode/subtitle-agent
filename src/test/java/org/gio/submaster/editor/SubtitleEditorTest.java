@@ -1,6 +1,6 @@
 package org.gio.submaster.editor;
 
-import org.gio.submaster.api.SubtitleData;
+import org.gio.submaster.api.SubtitleService;
 import org.gio.submaster.api.SubtitleFormatter;
 import org.gio.submaster.api.SubtitleUnit;
 import org.gio.submaster.exception.SubtitleEditorException;
@@ -47,14 +47,14 @@ public class SubtitleEditorTest {
     
     @Test
     public void testUpdateTime() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
         
-        SubtitleEditor.updateTime(subtitleData, 2, SubtitleFormatter.Type.MINUTE, -2);
-        SubtitleUnit subtitleUnit = subtitleData.get(2);
+        SubtitleEditor.updateTime(subtitleService, 2, SubtitleFormatter.Type.MINUTE, -2);
+        SubtitleUnit subtitleUnit = subtitleService.get(2);
         assertEquals(2L, subtitleUnit.number);
         assertEquals("00:09:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:10:26,600", subtitleUnit.endTime.toString());
@@ -64,33 +64,33 @@ public class SubtitleEditorTest {
     
     @Test(expected = SubtitleEditorException.class)
     public void testUpdateTimeInvalidSubtitleNumber() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
         
-        SubtitleEditor.updateTime(subtitleData, 100, SubtitleFormatter.Type.MINUTE, -2);
+        SubtitleEditor.updateTime(subtitleService, 100, SubtitleFormatter.Type.MINUTE, -2);
     }
     
     @Test
     public void testUpdateTimes() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
         
-        SubtitleEditor.updateTimes(subtitleData, SubtitleFormatter.Type.MINUTE, -2);
+        SubtitleEditor.updateTimes(subtitleService, SubtitleFormatter.Type.MINUTE, -2);
         
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals(1L, subtitleUnit.number);
         assertEquals("23:58:24,600", subtitleUnit.startTime.toString());
         assertEquals("23:58:26,600", subtitleUnit.endTime.toString());
         assertEquals("Foo", subtitleUnit.text.get(0));
         assertEquals("Bar", subtitleUnit.text.get(1));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals(2L, subtitleUnit.number);
         assertEquals("00:09:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:10:26,600", subtitleUnit.endTime.toString());
@@ -130,17 +130,17 @@ public class SubtitleEditorTest {
     
     @Test
     public void testUpdateText() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"),
             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"),
             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
         
-        SubtitleEditor.updateText(subtitleData, 2, 15);
+        SubtitleEditor.updateText(subtitleService, 2, 15);
         
-        SubtitleUnit subtitleUnit = subtitleData.get(2);
+        SubtitleUnit subtitleUnit = subtitleService.get(2);
         assertEquals(2L, subtitleUnit.number);
         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
@@ -154,30 +154,30 @@ public class SubtitleEditorTest {
     
     @Test(expected = SubtitleEditorException.class)
     public void testUpdateTextInvalidSubtitleNumber() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"),
             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"),
             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
         
-        SubtitleEditor.updateText(subtitleData, 100, 15);
+        SubtitleEditor.updateText(subtitleService, 100, 15);
     }
     
     @Test
     public void testUpdateTexts() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+        SubtitleService subtitleService = new SubtitleService();
+        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"),
             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
             SubtitleFormatter.stringToSrt("00:12:26,600"),
             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
         
-        SubtitleEditor.updateTexts(subtitleData, 15);
+        SubtitleEditor.updateTexts(subtitleService, 15);
         
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals(1L, subtitleUnit.number);
         assertEquals("00:00:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:00:26,600", subtitleUnit.endTime.toString());
@@ -187,7 +187,7 @@ public class SubtitleEditorTest {
         assertEquals("string. Ain't", subtitleUnit.text.get(2));
         assertEquals("it cool??? :)", subtitleUnit.text.get(3));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals(2L, subtitleUnit.number);
         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
@@ -201,18 +201,18 @@ public class SubtitleEditorTest {
     
     @Test
     public void testAppendSubtitle() {
-        SubtitleData subtitleData = new SubtitleData();
-        SubtitleEditor.appendSubtitle(subtitleData, "00:00:24,600", "00:00:26,600", Arrays.asList("Foo"));
-        SubtitleEditor.appendSubtitle(subtitleData, "00:11:24,600", "00:12:26,600", Arrays.asList("Bar"));
+        SubtitleService subtitleService = new SubtitleService();
+        SubtitleEditor.appendSubtitle(subtitleService, "00:00:24,600", "00:00:26,600", Arrays.asList("Foo"));
+        SubtitleEditor.appendSubtitle(subtitleService, "00:11:24,600", "00:12:26,600", Arrays.asList("Bar"));
         
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals(1L, subtitleUnit.number);
         assertEquals("00:00:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:00:26,600", subtitleUnit.endTime.toString());
         assertEquals(1, subtitleUnit.text.size());
         assertEquals("Foo", subtitleUnit.text.get(0));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals(2L, subtitleUnit.number);
         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
@@ -221,141 +221,141 @@ public class SubtitleEditorTest {
     
     @Test
     public void testRemoveSubtitle() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 5; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.removeSubtitle(subtitleData, 3);
+        SubtitleEditor.removeSubtitle(subtitleService, 3);
         
-        assertEquals(4, subtitleData.size());
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        assertEquals(4, subtitleService.size());
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(3);
+        subtitleUnit = subtitleService.get(3);
         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(4);
+        subtitleUnit = subtitleService.get(4);
         assertEquals("Foo5", StringUtils.join(subtitleUnit.text, ""));
     }
     
     @Test(expected = SubtitleEditorException.class)
     public void testRemoveSubtitleInvalidSubtitleNumber() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 5; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.removeSubtitle(subtitleData, 100);
+        SubtitleEditor.removeSubtitle(subtitleService, 100);
     }
     
     @Test
     public void testInsertSubtitle1() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 4; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.insertSubtitle(subtitleData, 3, "00:00:24,600", "00:00:26,600",
+        SubtitleEditor.insertSubtitle(subtitleService, 3, "00:00:24,600", "00:00:26,600",
             Arrays.asList("Foo100"));
         
-        assertEquals(5, subtitleData.size());
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        assertEquals(5, subtitleService.size());
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(3);
+        subtitleUnit = subtitleService.get(3);
         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(4);
+        subtitleUnit = subtitleService.get(4);
         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(5);
+        subtitleUnit = subtitleService.get(5);
         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
     }
     
     @Test
     public void testInsertSubtitle2() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 4; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.insertSubtitle(subtitleData,
+        SubtitleEditor.insertSubtitle(subtitleService,
             new SubtitleUnit(3,
             SubtitleFormatter.stringToSrt("00:00:24,600"),
             SubtitleFormatter.stringToSrt("00:00:26,600"),
             Arrays.asList("Foo100")));
         
-        assertEquals(5, subtitleData.size());
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        assertEquals(5, subtitleService.size());
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(3);
+        subtitleUnit = subtitleService.get(3);
         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(4);
+        subtitleUnit = subtitleService.get(4);
         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(5);
+        subtitleUnit = subtitleService.get(5);
         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
     }
     
     @Test(expected = SubtitleEditorException.class)
     public void testInsertSubtitleInvalidSubtitleNumber() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 4; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.insertSubtitle(subtitleData, 100, "00:00:24,600", "00:00:26,600",
+        SubtitleEditor.insertSubtitle(subtitleService, 100, "00:00:24,600", "00:00:26,600",
             Arrays.asList("Foo100"));
     }
     
     @Test
     public void testPrepend() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 3; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.prependSubtitle(subtitleData, "00:00:24,600", "00:00:26,600",
+        SubtitleEditor.prependSubtitle(subtitleService, "00:00:24,600", "00:00:26,600",
             Arrays.asList("Foo100"));
         
-        assertEquals(4, subtitleData.size());
-        SubtitleUnit subtitleUnit = subtitleData.get(1);
+        assertEquals(4, subtitleService.size());
+        SubtitleUnit subtitleUnit = subtitleService.get(1);
         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(2);
+        subtitleUnit = subtitleService.get(2);
         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(3);
+        subtitleUnit = subtitleService.get(3);
         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
         
-        subtitleUnit = subtitleData.get(4);
+        subtitleUnit = subtitleService.get(4);
         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
     }
     
     @Test
     public void testUpdateSubtitle() throws Exception {
-        SubtitleData subtitleData = new SubtitleData();
+        SubtitleService subtitleService = new SubtitleService();
         for (int i = 1; i <= 4; i++) {
-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
         }
-        SubtitleEditor.updateSubtitle(subtitleData,
+        SubtitleEditor.updateSubtitle(subtitleService,
             new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:26,600"), "test"));
         
-        SubtitleUnit s = subtitleData.get(2);
+        SubtitleUnit s = subtitleService.get(2);
         assertEquals("test", StringUtils.join(s.text, ""));
     }
 }

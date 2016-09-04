@@ -16,10 +16,10 @@ public class SubtitleReaderTest {
 
    @Test
    public void testRead() throws Exception {
-       SubtitleData subtitleData = SubtitleReader.read(new File("src/test/resources/good1.srt"));
+       SubtitleService subtitleService = new SubtitleService(new File("src/test/resources/good1.srt"));
        
-       assertEquals(2, subtitleData.size());
-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
+       assertEquals(2, subtitleService.size());
+       Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
        assertEquals(1, subtitleUnit.number);
        assertEquals("Hello World", subtitleUnit.text.get(0));
@@ -37,7 +37,7 @@ public class SubtitleReaderTest {
 
     @Test
     public void testReadByTime() throws Exception {
-        SubtitleData info = SubtitleReader.read(new File("src/test/resources/good2.srt"));
+        SubtitleService info = new SubtitleService(new File("src/test/resources/good2.srt"));
 
         assertEquals(772, info.size());
 
@@ -70,12 +70,13 @@ public class SubtitleReaderTest {
 
     @Test(expected = SubtitleReaderException.class)
    public void testReadFileDoesntExist() {
-       SubtitleReader.read(new File("foo.srt"));
+        new SubtitleService(new File("foo.srt"));
+
    }
    
    @Test(expected = SubtitleReaderException.class)
    public void testReadIsNotAFile() {
-       SubtitleReader.read(new File("."));
+       new SubtitleService(new File("."));
    }
    
    /*
@@ -83,7 +84,8 @@ public class SubtitleReaderTest {
     */
    @Test(expected = InvalidSubtitleLineException.class)
    public void testReadInvalidSRT1() {
-       SubtitleReader.read(new File("src/test/resources/bad1.srt"));
+       new SubtitleService(new File("src/test/resources/bad1.srt"));
+
    }
    
    /*
@@ -91,7 +93,8 @@ public class SubtitleReaderTest {
     */
    @Test(expected = InvalidSubtitleLineException.class)
    public void testReadInvalidSRT2() {
-       SubtitleReader.read(new File("src/test/resources/bad2.srt"));
+       new SubtitleService(new File("src/test/resources/bad2.srt"));
+
    }
    
    /*
@@ -99,7 +102,8 @@ public class SubtitleReaderTest {
     */
    @Test(expected = InvalidSubtitleLineException.class)
    public void testReadInvalidSRT3() {
-       SubtitleReader.read(new File("src/test/resources/bad3.srt"));
+       new SubtitleService(new File("src/test/resources/bad3.srt"));
+
    }
    
    /*
@@ -107,6 +111,7 @@ public class SubtitleReaderTest {
     */
    @Test(expected = InvalidSubtitleLineException.class)
    public void testReadInvalidSRT4() {
-       SubtitleReader.read(new File("src/test/resources/bad4.srt"));
+       new SubtitleService(new File("src/test/resources/bad4.srt"));
+
    }
 }

@@ -20,12 +20,12 @@ public class SubtitleWriter {
      * Writes a srt file from an SubtitleUnit object.
      * 
      * @param srtFile the srt file
-     * @param subtitleData the SubtitleData object
+     * @param subtitleService the SubtitleService object
      * @throws SubtitleWriterException thrown while writing an SubtitleUnit file
      */
-    public static void write(File srtFile, SubtitleData subtitleData) throws SubtitleWriterException, ParseException {
+    public static void write(File srtFile, SubtitleService subtitleService) throws SubtitleWriterException, ParseException {
         try (PrintWriter pw = new PrintWriter(srtFile)) {
-            for (SubtitleUnit subtitleUnit : subtitleData) {
+            for (SubtitleUnit subtitleUnit : subtitleService) {
                 pw.println(subtitleUnit.number);
                 pw.println(
                     subtitleUnit.startTime.toString() +

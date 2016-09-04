@@ -8,18 +8,18 @@ import java.util.Iterator;
 import org.gio.submaster.util.StringUtils;
 import org.junit.Test;
 
-public class SubtitleDataTest {
+public class SubtitleServiceTest {
 
    @Test
    public void testAdd() {
-       SubtitleData subtitleData = new SubtitleData();
+       SubtitleService subtitleService = new SubtitleService();
        SRTTime startTime = new SRTTime(0, 0, 15, 120);
        SRTTime startTime2 = new SRTTime(0, 0, 3, 567);
-       subtitleData.add(new SubtitleUnit(1, startTime, null, "Foo", "Bar"));
-       subtitleData.add(new SubtitleUnit(2, startTime2, null, "Bye", "World"));
+       subtitleService.add(new SubtitleUnit(1, startTime, null, "Foo", "Bar"));
+       subtitleService.add(new SubtitleUnit(2, startTime2, null, "Bye", "World"));
        
-       assertEquals(2, subtitleData.size());
-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
+       assertEquals(2, subtitleService.size());
+       Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
        assertEquals(2, subtitleUnit.number);
        assertEquals("00:00:03,567", subtitleUnit.startTime.toString());
@@ -40,15 +40,15 @@ public class SubtitleDataTest {
 
    @Test
    public void testRemove1() {
-       SubtitleData subtitleData = new SubtitleData();
-       subtitleData.add(new SubtitleUnit(3, null, null, "Hello", "World"));
-       subtitleData.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
-       subtitleData.add(new SubtitleUnit(2, null, null, "Bye", "World"));
+       SubtitleService subtitleService = new SubtitleService();
+       subtitleService.add(new SubtitleUnit(3, null, null, "Hello", "World"));
+       subtitleService.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
+       subtitleService.add(new SubtitleUnit(2, null, null, "Bye", "World"));
        
-       subtitleData.remove(3);
+       subtitleService.remove(3);
        
-       assertEquals(2, subtitleData.size());
-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
+       assertEquals(2, subtitleService.size());
+       Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
        assertEquals(1, subtitleUnit.number);
        assertEquals(null, subtitleUnit.startTime);
@@ -72,18 +72,18 @@ public class SubtitleDataTest {
        SRTTime startTime2 = new SRTTime(0, 0, 0, 0);
        SRTTime endTime2 = new SRTTime(0, 0, 0, 5);
 
-       SubtitleData subtitleData = new SubtitleData();
+       SubtitleService subtitleService = new SubtitleService();
        SubtitleUnit toBeDeleted = new SubtitleUnit(3, startTime, endTime, "Hello", "World");
-       subtitleData.add(toBeDeleted);
-       subtitleData.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
+       subtitleService.add(toBeDeleted);
+       subtitleService.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
 
 
-       subtitleData.add(new SubtitleUnit(2, startTime2, endTime2, "Bye", "World"));
+       subtitleService.add(new SubtitleUnit(2, startTime2, endTime2, "Bye", "World"));
        
-       subtitleData.remove(toBeDeleted);
+       subtitleService.remove(toBeDeleted);
        
-       assertEquals(2, subtitleData.size());
-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
+       assertEquals(2, subtitleService.size());
+       Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
        assertEquals(1, subtitleUnit.number);
        assertEquals("Foo Bar", StringUtils.join(subtitleUnit.text, " "));
@@ -99,25 +99,25 @@ public class SubtitleDataTest {
 
    @Test
    public void testGet() {
-       SubtitleData subtitleData = new SubtitleData();
+       SubtitleService subtitleService = new SubtitleService();
        SubtitleUnit subtitleUnit1 = new SubtitleUnit(1, null, null, "Foo", "Bar");
-       subtitleData.add(subtitleUnit1);
+       subtitleService.add(subtitleUnit1);
        SubtitleUnit subtitleUnit2 = new SubtitleUnit(2, null, null, "Hello", "World");
-       subtitleData.add(subtitleUnit2);
+       subtitleService.add(subtitleUnit2);
        
-       assertEquals(subtitleUnit1, subtitleData.get(1));
-       assertEquals(subtitleUnit1, subtitleData.get(subtitleUnit1));
+       assertEquals(subtitleUnit1, subtitleService.get(1));
+       assertEquals(subtitleUnit1, subtitleService.get(subtitleUnit1));
    }
    
    @Test
    public void testContains() {
-       SubtitleData subtitleData = new SubtitleData();
+       SubtitleService subtitleService = new SubtitleService();
        SubtitleUnit subtitleUnit1 = new SubtitleUnit(1, null, null, "Foo", "Bar");
-       subtitleData.add(subtitleUnit1);
+       subtitleService.add(subtitleUnit1);
        SubtitleUnit subtitleUnit2 = new SubtitleUnit(2, null, null, "Hello", "World");
-       subtitleData.add(subtitleUnit2);
+       subtitleService.add(subtitleUnit2);
        
-       assertTrue(subtitleData.contains(1));
-       assertTrue(subtitleData.contains(subtitleUnit1));
+       assertTrue(subtitleService.contains(1));
+       assertTrue(subtitleService.contains(subtitleUnit1));
    }
 }

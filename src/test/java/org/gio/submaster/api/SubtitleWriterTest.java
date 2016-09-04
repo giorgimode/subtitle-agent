@@ -17,7 +17,7 @@ public class SubtitleWriterTest {
     
     @Test
     public void testWrite() throws Exception {
-        SubtitleData inInfo = new SubtitleData();
+        SubtitleService inInfo = new SubtitleService();
         inInfo.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:00:24,600"),
                 SubtitleFormatter.stringToSrt("00:00:27,800"), "Foo Bar", "Bar Foo"));
         inInfo.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:20,000"),
@@ -26,7 +26,7 @@ public class SubtitleWriterTest {
         File srtFile = new File("src/test/resources/test1.srt");
         SubtitleWriter.write(srtFile, inInfo);
         
-        SubtitleData outInfo = SubtitleReader.read(srtFile);
+        SubtitleService outInfo = new SubtitleService(srtFile);
         assertEquals(inInfo.size(), outInfo.size());
         Iterator<SubtitleUnit> inIter = inInfo.iterator();
         Iterator<SubtitleUnit> outIter = outInfo.iterator();

@@ -2,6 +2,7 @@ package org.gio.submaster.api;
 
 import org.gio.submaster.editor.SubtitleEditor;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -11,34 +12,43 @@ import static org.gio.submaster.util.StringUtils.convertSubtitleUnit;
 /**
  * This class stores collections of SubtitleUnit objects.
  * 
- * All the methods here perform low-level operations on SubtitleData object.
- * If you need to perform high-level operations for editing the SubtitleData,
+ * All the methods here perform low-level operations on SubtitleService object.
+ * If you need to perform high-level operations for editing the SubtitleService,
  * use {@link SubtitleEditor} instead.
  * 
  *
  */
-public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
+public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
     private final TreeSet<SubtitleUnit> info;
     
     /**
-     * Creates a new instance of SubtitleData.
+     * Creates a new instance of SubtitleService.
      */
-    public SubtitleData() {
+    public SubtitleService() {
         info = new TreeSet<>();
     }
-    
-    /**
-     * Creates a new instance of SubtitleData.
-     * This constructor acts as a copy constructor.
-     * 
-     * @param subtitleData the SubtitleData object
-     */
-    public SubtitleData(SubtitleData subtitleData) {
-        info = new TreeSet<>(subtitleData.info);
+
+    public SubtitleService(File subtitleFile) {
+        info = new TreeSet<>();
+        SubtitleReader.read(this, subtitleFile);
     }
     
     /**
-     * Adds SubtitleUnit object into SubtitleData object. If SubtitleUnit object already exists, the old
+     * Creates a new instance of SubtitleService.
+     * This constructor acts as a copy constructor.
+     * 
+     * @param subtitleService the SubtitleService object
+     */
+    public SubtitleService(SubtitleService subtitleService) {
+        info = new TreeSet<>(subtitleService.info);
+    }
+
+    public void addSubtitleFile(File subtitleFile){
+            SubtitleReader.read(this, subtitleFile);
+    }
+
+    /**
+     * Adds SubtitleUnit object into SubtitleService object. If SubtitleUnit object already exists, the old
      * SubtitleUnit object will be replaced with the new SubtitleUnit object.
      * 
      * @param subtitleUnit the SubtitleUnit object to be added
@@ -56,27 +66,27 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
     }
     
     /**
-     * Gets the number of SubtitleUnit objects stored in SubtitleData object.
+     * Gets the number of SubtitleUnit objects stored in SubtitleService object.
      * 
-     * @return the number of SubtitleUnit objects stored in SubtitleData object
+     * @return the number of SubtitleUnit objects stored in SubtitleService object
      */
     public int size() {
         return info.size();
     }
     
     /**
-     * Removes the SubtitleUnit object from SubtitleData.
+     * Removes the SubtitleUnit object from SubtitleService.
      * 
-     * @param subtitleUnit the SubtitleUnit object to be removed from SubtitleData
+     * @param subtitleUnit the SubtitleUnit object to be removed from SubtitleService
      */
     public void remove(SubtitleUnit subtitleUnit) {
         info.remove(subtitleUnit);
     }
     
     /**
-     * Removes the SubtitleUnit object with subtitle number from SubtitleData.
+     * Removes the SubtitleUnit object with subtitle number from SubtitleService.
      * 
-     * @param number the subtitle number to be removed from SubtitleData
+     * @param number the subtitle number to be removed from SubtitleService
      */
     public void remove(int number) {
         info.remove(get(number));
@@ -127,20 +137,20 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
     }
     
     /**
-     * Check if the subtitle number is in the SubtitleData object.
+     * Check if the subtitle number is in the SubtitleService object.
      * 
      * @param number the subtitle number
-     * @return true if the subtitle number is in the SubtitleData; false otherwise
+     * @return true if the subtitle number is in the SubtitleService; false otherwise
      */
     public boolean contains(int number) {
         return info.contains(new SubtitleUnit(number, null, null, new String[]{}));
     }
     
     /**
-     * Check if the SubtitleUnit is in the SubtitleData object.
+     * Check if the SubtitleUnit is in the SubtitleService object.
      * 
      * @param subtitleUnit the SubtitleUnit object
-     * @return true if the subtitle number is in the SubtitleData; false otherwise
+     * @return true if the subtitle number is in the SubtitleService; false otherwise
      */
     public boolean contains(SubtitleUnit subtitleUnit) {
         return info.contains(subtitleUnit);
@@ -151,6 +161,6 @@ public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
      */
     @Override
     public Object clone() {
-        return new SubtitleData(this);
+        return new SubtitleService(this);
     }
 }

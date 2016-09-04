@@ -1,7 +1,7 @@
 package org.gio.submaster.editor;
 
 import org.gio.submaster.api.SRTTime;
-import org.gio.submaster.api.SubtitleData;
+import org.gio.submaster.api.SubtitleService;
 import org.gio.submaster.api.SubtitleFormatter;
 import org.gio.submaster.api.SubtitleUnit;
 import org.gio.submaster.exception.SubtitleEditorException;
@@ -21,15 +21,15 @@ public class SubtitleEditor {
     }
     
     /**
-     * Updates time of the SubtitleUnit object in the SubtitleData object. This method will
+     * Updates time of the SubtitleUnit object in the SubtitleService object. This method will
      * update both start time and end time.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param subtitleNumber the subtitle number
      * @param type the subtitle time format type
      * @param value the time value
      */
-    public static void updateTime(SubtitleData info, int subtitleNumber,
+    public static void updateTime(SubtitleService info, int subtitleNumber,
                                   SubtitleFormatter.Type type, int value) {
         if (!info.contains(subtitleNumber)) {
             throw new SubtitleEditorException(subtitleNumber + " could not be found");
@@ -38,14 +38,14 @@ public class SubtitleEditor {
     }
     
     /**
-     * Updates all times of the SubtitleUnit objects in the SubtitleData object. This method will
+     * Updates all times of the SubtitleUnit objects in the SubtitleService object. This method will
      * update both start time and end time.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param type the SubtitleUnit time object
      * @param value the time value
      */
-    public static void updateTimes(SubtitleData info, SubtitleFormatter.Type type, int value) {
+    public static void updateTimes(SubtitleService info, SubtitleFormatter.Type type, int value) {
         for (int i = 1; i <= info.size(); i++) {
             updateTime(info, info.get(i).number, type, value);
         }
@@ -86,11 +86,11 @@ public class SubtitleEditor {
     /**
      * Updates a subtitle text according to the width given.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param subtitleNumber the subtitle number
      * @param width the width (number of characters per subtitle line)
      */
-    public static void updateText(SubtitleData info, int subtitleNumber, int width) {
+    public static void updateText(SubtitleService info, int subtitleNumber, int width) {
         if (!info.contains(subtitleNumber)) {
             throw new SubtitleEditorException(subtitleNumber + " could not be found");
         }
@@ -100,10 +100,10 @@ public class SubtitleEditor {
     /**
      * Updates all subtitle texts according to the width given.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param width the width (number of characters per subtitle line)
      */
-    public static void updateTexts(SubtitleData info, int width) {
+    public static void updateTexts(SubtitleService info, int width) {
         for (int i = 1; i <= info.size(); i++) {
             updateText(info, info.get(i).number, width);
         }
@@ -141,14 +141,14 @@ public class SubtitleEditor {
     }
     
     /**
-     * Appends a new subtitle into SubtitleData.
+     * Appends a new subtitle into SubtitleService.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param startTime the start time
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public static void appendSubtitle(SubtitleData info, String startTime,
+    public static void appendSubtitle(SubtitleService info, String startTime,
                                       String endTime, List<String> text) {
         try {
             SubtitleUnit newSubtitleUnit = new SubtitleUnit(
@@ -163,33 +163,33 @@ public class SubtitleEditor {
     }
     
     /**
-     * Prepends the subtitle into SubtitleData object.
+     * Prepends the subtitle into SubtitleService object.
      * 
      * This operation is very expensive since it needs to update all the subtitle
      * numbers.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param startTime the start time
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public static void prependSubtitle(SubtitleData info, String startTime,
+    public static void prependSubtitle(SubtitleService info, String startTime,
                                        String endTime, List<String> text) {
         insertSubtitle(info, 1, startTime, endTime, text);
     }
     
     /**
-     * Inserts the subtitle into SubtitleData object. All the subsequent subtitle
+     * Inserts the subtitle into SubtitleService object. All the subsequent subtitle
      * numbers after the new subtitle that is going to be inserted will be
      * updated.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param subtitleNumber the subtitle number
      * @param startTime the start time
      * @param endTime the end time
      * @param text the subtitle text
      */
-    public static void insertSubtitle(SubtitleData info, int subtitleNumber,
+    public static void insertSubtitle(SubtitleService info, int subtitleNumber,
                                       String startTime, String endTime, List<String> text) {
         if (!info.contains(subtitleNumber)) {
             throw new SubtitleEditorException(subtitleNumber + " could not be found");
@@ -209,14 +209,14 @@ public class SubtitleEditor {
     }
     
     /**
-     * Inserts the subtitle into SubtitleData object. All the subsequent subtitle
+     * Inserts the subtitle into SubtitleService object. All the subsequent subtitle
      * numbers after the new subtitle that is going to be inserted will be
      * updated.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param newSubtitleUnit the new SubtitleUnit
      */
-    public static void insertSubtitle(SubtitleData info, SubtitleUnit newSubtitleUnit) {
+    public static void insertSubtitle(SubtitleService info, SubtitleUnit newSubtitleUnit) {
         for (int i = info.size(); i >= newSubtitleUnit.number; i--) {
             SubtitleUnit tmp = info.get(i);
             info.add(new SubtitleUnit(tmp.number+1, tmp.startTime, tmp.endTime, tmp.text));
@@ -226,14 +226,14 @@ public class SubtitleEditor {
     }
     
     /**
-     * Removes the subtitle from SubtitleData object. This method will update
+     * Removes the subtitle from SubtitleService object. This method will update
      * all the subsequent subtitle numbers after the subtitle number that is
      * going to be removed.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param subtitleNumber the subtitle number to be removed
      */
-    public static void removeSubtitle(SubtitleData info, int subtitleNumber) {
+    public static void removeSubtitle(SubtitleService info, int subtitleNumber) {
         if (!info.contains(subtitleNumber)) {
             throw new SubtitleEditorException(subtitleNumber + " could not be found");
         }
@@ -248,12 +248,12 @@ public class SubtitleEditor {
     }
     
     /**
-     * Updates the subtitle from the SubtitleData object.
+     * Updates the subtitle from the SubtitleService object.
      * 
-     * @param info the SubtitleData object
+     * @param info the SubtitleService object
      * @param subtitleUnit the SubtitleUnit object
      */
-    public static void updateSubtitle(SubtitleData info, SubtitleUnit subtitleUnit) {
+    public static void updateSubtitle(SubtitleService info, SubtitleUnit subtitleUnit) {
         info.add(subtitleUnit);
     }
 }

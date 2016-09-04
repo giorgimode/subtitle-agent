@@ -4,15 +4,15 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import org.gio.submaster.api.SubtitleService;
 import org.gio.submaster.api.SubtitleUnit;
-import org.gio.submaster.api.SubtitleData;
 import org.gio.submaster.api.SubtitleReader;
 import org.gio.submaster.api.SubtitleFormatter;
 import org.gio.submaster.api.SubtitleWriter;
 import org.gio.submaster.editor.SubtitleEditor;
 
 public class Main {
-    private static void print(SubtitleData info) throws ParseException {
+    private static void print(SubtitleService info) throws ParseException {
         for (SubtitleUnit s : info) {
             System.out.println("Number: " + s.number);
             System.out.println("Start time: " + s.startTime);
@@ -26,12 +26,12 @@ public class Main {
     }
     
     private static void testRead() throws ParseException {
-        SubtitleData info = SubtitleReader.read(new File("in.srt"));
+        SubtitleService info = new SubtitleService(new File("in.srt"));
         print(info);
     }
     
     private static void testWrite() throws ParseException {
-        SubtitleData info = new SubtitleData();
+        SubtitleService info = new SubtitleService();
         info.add(new SubtitleUnit(1, null, null, "Hello", "World"));
         info.add(new SubtitleUnit(2, null, null, "Bye", "World"));
         
@@ -41,7 +41,7 @@ public class Main {
     }
     
     private static void testEdit() throws ParseException {
-        SubtitleData info = SubtitleReader.read(new File("in.srt"));
+        SubtitleService info = new SubtitleService(new File("in.srt"));
         SubtitleEditor.updateText(info, 1, 10);
         SubtitleEditor.updateTime(info, 1, SubtitleFormatter.Type.MILLISECOND, 100);
         SubtitleEditor.prependSubtitle(info, "00:00:05,000", "00:00:07,000",
