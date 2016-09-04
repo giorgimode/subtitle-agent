@@ -33,9 +33,6 @@ public class SubtitleReader {
         if (!srtFile.isFile()) {
             throw new SubtitleReaderException(srtFile.getAbsolutePath() + " is not a regular file");
         }
-        HashMap<String, String> a;
-        LinkedHashMap<String, String> b;
-
          try (BufferedReader br = new BufferedReader(new FileReader(srtFile))) {
             while (true) {
                 subtitleService.add(parse(br));
