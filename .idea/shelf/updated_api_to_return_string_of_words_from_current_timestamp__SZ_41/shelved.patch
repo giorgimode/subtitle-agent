@@ -1,0 +1,1056 @@
+Index: src/test/java/org/gio/submaster/api/SubtitleDataTest.java
+===================================================================
+--- src/test/java/org/gio/submaster/api/SubtitleDataTest.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/test/java/org/gio/submaster/api/SubtitleServiceTest.java	(revision )
+@@ -8,18 +8,18 @@
+ import org.gio.submaster.util.StringUtils;
+ import org.junit.Test;
+ 
+-public class SubtitleDataTest {
++public class SubtitleServiceTest {
+ 
+    @Test
+    public void testAdd() {
+-       SubtitleData subtitleData = new SubtitleData();
++       SubtitleService subtitleService = new SubtitleService();
+        SRTTime startTime = new SRTTime(0, 0, 15, 120);
+        SRTTime startTime2 = new SRTTime(0, 0, 3, 567);
+-       subtitleData.add(new SubtitleUnit(1, startTime, null, "Foo", "Bar"));
+-       subtitleData.add(new SubtitleUnit(2, startTime2, null, "Bye", "World"));
++       subtitleService.add(new SubtitleUnit(1, startTime, null, "Foo", "Bar"));
++       subtitleService.add(new SubtitleUnit(2, startTime2, null, "Bye", "World"));
+        
+-       assertEquals(2, subtitleData.size());
+-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
++       assertEquals(2, subtitleService.size());
++       Iterator<SubtitleUnit> iter = subtitleService.iterator();
+        SubtitleUnit subtitleUnit = iter.next();
+        assertEquals(2, subtitleUnit.number);
+        assertEquals("00:00:03,567", subtitleUnit.startTime.toString());
+@@ -40,15 +40,15 @@
+ 
+    @Test
+    public void testRemove1() {
+-       SubtitleData subtitleData = new SubtitleData();
+-       subtitleData.add(new SubtitleUnit(3, null, null, "Hello", "World"));
+-       subtitleData.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
+-       subtitleData.add(new SubtitleUnit(2, null, null, "Bye", "World"));
++       SubtitleService subtitleService = new SubtitleService();
++       subtitleService.add(new SubtitleUnit(3, null, null, "Hello", "World"));
++       subtitleService.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
++       subtitleService.add(new SubtitleUnit(2, null, null, "Bye", "World"));
+        
+-       subtitleData.remove(3);
++       subtitleService.remove(3);
+        
+-       assertEquals(2, subtitleData.size());
+-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
++       assertEquals(2, subtitleService.size());
++       Iterator<SubtitleUnit> iter = subtitleService.iterator();
+        SubtitleUnit subtitleUnit = iter.next();
+        assertEquals(1, subtitleUnit.number);
+        assertEquals(null, subtitleUnit.startTime);
+@@ -72,18 +72,18 @@
+        SRTTime startTime2 = new SRTTime(0, 0, 0, 0);
+        SRTTime endTime2 = new SRTTime(0, 0, 0, 5);
+ 
+-       SubtitleData subtitleData = new SubtitleData();
++       SubtitleService subtitleService = new SubtitleService();
+        SubtitleUnit toBeDeleted = new SubtitleUnit(3, startTime, endTime, "Hello", "World");
+-       subtitleData.add(toBeDeleted);
+-       subtitleData.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
++       subtitleService.add(toBeDeleted);
++       subtitleService.add(new SubtitleUnit(1, null, null, "Foo", "Bar"));
+ 
+ 
+-       subtitleData.add(new SubtitleUnit(2, startTime2, endTime2, "Bye", "World"));
++       subtitleService.add(new SubtitleUnit(2, startTime2, endTime2, "Bye", "World"));
+        
+-       subtitleData.remove(toBeDeleted);
++       subtitleService.remove(toBeDeleted);
+        
+-       assertEquals(2, subtitleData.size());
+-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
++       assertEquals(2, subtitleService.size());
++       Iterator<SubtitleUnit> iter = subtitleService.iterator();
+        SubtitleUnit subtitleUnit = iter.next();
+        assertEquals(1, subtitleUnit.number);
+        assertEquals("Foo Bar", StringUtils.join(subtitleUnit.text, " "));
+@@ -99,25 +99,25 @@
+ 
+    @Test
+    public void testGet() {
+-       SubtitleData subtitleData = new SubtitleData();
++       SubtitleService subtitleService = new SubtitleService();
+        SubtitleUnit subtitleUnit1 = new SubtitleUnit(1, null, null, "Foo", "Bar");
+-       subtitleData.add(subtitleUnit1);
++       subtitleService.add(subtitleUnit1);
+        SubtitleUnit subtitleUnit2 = new SubtitleUnit(2, null, null, "Hello", "World");
+-       subtitleData.add(subtitleUnit2);
++       subtitleService.add(subtitleUnit2);
+        
+-       assertEquals(subtitleUnit1, subtitleData.get(1));
+-       assertEquals(subtitleUnit1, subtitleData.get(subtitleUnit1));
++       assertEquals(subtitleUnit1, subtitleService.get(1));
++       assertEquals(subtitleUnit1, subtitleService.get(subtitleUnit1));
+    }
+    
+    @Test
+    public void testContains() {
+-       SubtitleData subtitleData = new SubtitleData();
++       SubtitleService subtitleService = new SubtitleService();
+        SubtitleUnit subtitleUnit1 = new SubtitleUnit(1, null, null, "Foo", "Bar");
+-       subtitleData.add(subtitleUnit1);
++       subtitleService.add(subtitleUnit1);
+        SubtitleUnit subtitleUnit2 = new SubtitleUnit(2, null, null, "Hello", "World");
+-       subtitleData.add(subtitleUnit2);
++       subtitleService.add(subtitleUnit2);
+        
+-       assertTrue(subtitleData.contains(1));
+-       assertTrue(subtitleData.contains(subtitleUnit1));
++       assertTrue(subtitleService.contains(1));
++       assertTrue(subtitleService.contains(subtitleUnit1));
+    }
+ }
+Index: src/test/java/org/gio/submaster/editor/SubtitleEditorTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/org/gio/submaster/editor/SubtitleEditorTest.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/test/java/org/gio/submaster/editor/SubtitleEditorTest.java	(revision )
+@@ -1,6 +1,6 @@
+ package org.gio.submaster.editor;
+ 
+-import org.gio.submaster.api.SubtitleData;
++import org.gio.submaster.api.SubtitleService;
+ import org.gio.submaster.api.SubtitleFormatter;
+ import org.gio.submaster.api.SubtitleUnit;
+ import org.gio.submaster.exception.SubtitleEditorException;
+@@ -47,14 +47,14 @@
+     
+     @Test
+     public void testUpdateTime() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
+         
+-        SubtitleEditor.updateTime(subtitleData, 2, SubtitleFormatter.Type.MINUTE, -2);
+-        SubtitleUnit subtitleUnit = subtitleData.get(2);
++        SubtitleEditor.updateTime(subtitleService, 2, SubtitleFormatter.Type.MINUTE, -2);
++        SubtitleUnit subtitleUnit = subtitleService.get(2);
+         assertEquals(2L, subtitleUnit.number);
+         assertEquals("00:09:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:10:26,600", subtitleUnit.endTime.toString());
+@@ -64,33 +64,33 @@
+     
+     @Test(expected = SubtitleEditorException.class)
+     public void testUpdateTimeInvalidSubtitleNumber() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
+         
+-        SubtitleEditor.updateTime(subtitleData, 100, SubtitleFormatter.Type.MINUTE, -2);
++        SubtitleEditor.updateTime(subtitleService, 100, SubtitleFormatter.Type.MINUTE, -2);
+     }
+     
+     @Test
+     public void testUpdateTimes() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo", "Bar"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"), "Bye", "World"));
+         
+-        SubtitleEditor.updateTimes(subtitleData, SubtitleFormatter.Type.MINUTE, -2);
++        SubtitleEditor.updateTimes(subtitleService, SubtitleFormatter.Type.MINUTE, -2);
+         
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals(1L, subtitleUnit.number);
+         assertEquals("23:58:24,600", subtitleUnit.startTime.toString());
+         assertEquals("23:58:26,600", subtitleUnit.endTime.toString());
+         assertEquals("Foo", subtitleUnit.text.get(0));
+         assertEquals("Bar", subtitleUnit.text.get(1));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals(2L, subtitleUnit.number);
+         assertEquals("00:09:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:10:26,600", subtitleUnit.endTime.toString());
+@@ -130,17 +130,17 @@
+     
+     @Test
+     public void testUpdateText() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"),
+             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"),
+             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
+         
+-        SubtitleEditor.updateText(subtitleData, 2, 15);
++        SubtitleEditor.updateText(subtitleService, 2, 15);
+         
+-        SubtitleUnit subtitleUnit = subtitleData.get(2);
++        SubtitleUnit subtitleUnit = subtitleService.get(2);
+         assertEquals(2L, subtitleUnit.number);
+         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
+@@ -154,30 +154,30 @@
+     
+     @Test(expected = SubtitleEditorException.class)
+     public void testUpdateTextInvalidSubtitleNumber() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"),
+             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"),
+             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
+         
+-        SubtitleEditor.updateText(subtitleData, 100, 15);
++        SubtitleEditor.updateText(subtitleService, 100, 15);
+     }
+     
+     @Test
+     public void testUpdateTexts() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
+-        subtitleData.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
++        SubtitleService subtitleService = new SubtitleService();
++        subtitleService.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"),
+             "Hello!!! This is a very long string.", "Ain't it cool??? :)"));
+-        subtitleData.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
++        subtitleService.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:11:24,600"),
+             SubtitleFormatter.stringToSrt("00:12:26,600"),
+             "Hello!!! There is really nothing to see here.", "Foo Bar.", "Bye World."));
+         
+-        SubtitleEditor.updateTexts(subtitleData, 15);
++        SubtitleEditor.updateTexts(subtitleService, 15);
+         
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals(1L, subtitleUnit.number);
+         assertEquals("00:00:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:00:26,600", subtitleUnit.endTime.toString());
+@@ -187,7 +187,7 @@
+         assertEquals("string. Ain't", subtitleUnit.text.get(2));
+         assertEquals("it cool??? :)", subtitleUnit.text.get(3));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals(2L, subtitleUnit.number);
+         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
+@@ -201,18 +201,18 @@
+     
+     @Test
+     public void testAppendSubtitle() {
+-        SubtitleData subtitleData = new SubtitleData();
+-        SubtitleEditor.appendSubtitle(subtitleData, "00:00:24,600", "00:00:26,600", Arrays.asList("Foo"));
+-        SubtitleEditor.appendSubtitle(subtitleData, "00:11:24,600", "00:12:26,600", Arrays.asList("Bar"));
++        SubtitleService subtitleService = new SubtitleService();
++        SubtitleEditor.appendSubtitle(subtitleService, "00:00:24,600", "00:00:26,600", Arrays.asList("Foo"));
++        SubtitleEditor.appendSubtitle(subtitleService, "00:11:24,600", "00:12:26,600", Arrays.asList("Bar"));
+         
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals(1L, subtitleUnit.number);
+         assertEquals("00:00:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:00:26,600", subtitleUnit.endTime.toString());
+         assertEquals(1, subtitleUnit.text.size());
+         assertEquals("Foo", subtitleUnit.text.get(0));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals(2L, subtitleUnit.number);
+         assertEquals("00:11:24,600", subtitleUnit.startTime.toString());
+         assertEquals("00:12:26,600", subtitleUnit.endTime.toString());
+@@ -221,141 +221,141 @@
+     
+     @Test
+     public void testRemoveSubtitle() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 5; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.removeSubtitle(subtitleData, 3);
++        SubtitleEditor.removeSubtitle(subtitleService, 3);
+         
+-        assertEquals(4, subtitleData.size());
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        assertEquals(4, subtitleService.size());
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(3);
++        subtitleUnit = subtitleService.get(3);
+         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(4);
++        subtitleUnit = subtitleService.get(4);
+         assertEquals("Foo5", StringUtils.join(subtitleUnit.text, ""));
+     }
+     
+     @Test(expected = SubtitleEditorException.class)
+     public void testRemoveSubtitleInvalidSubtitleNumber() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 5; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.removeSubtitle(subtitleData, 100);
++        SubtitleEditor.removeSubtitle(subtitleService, 100);
+     }
+     
+     @Test
+     public void testInsertSubtitle1() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 4; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.insertSubtitle(subtitleData, 3, "00:00:24,600", "00:00:26,600",
++        SubtitleEditor.insertSubtitle(subtitleService, 3, "00:00:24,600", "00:00:26,600",
+             Arrays.asList("Foo100"));
+         
+-        assertEquals(5, subtitleData.size());
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        assertEquals(5, subtitleService.size());
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(3);
++        subtitleUnit = subtitleService.get(3);
+         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(4);
++        subtitleUnit = subtitleService.get(4);
+         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(5);
++        subtitleUnit = subtitleService.get(5);
+         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
+     }
+     
+     @Test
+     public void testInsertSubtitle2() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 4; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.insertSubtitle(subtitleData,
++        SubtitleEditor.insertSubtitle(subtitleService,
+             new SubtitleUnit(3,
+             SubtitleFormatter.stringToSrt("00:00:24,600"),
+             SubtitleFormatter.stringToSrt("00:00:26,600"),
+             Arrays.asList("Foo100")));
+         
+-        assertEquals(5, subtitleData.size());
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        assertEquals(5, subtitleService.size());
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(3);
++        subtitleUnit = subtitleService.get(3);
+         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(4);
++        subtitleUnit = subtitleService.get(4);
+         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(5);
++        subtitleUnit = subtitleService.get(5);
+         assertEquals("Foo4", StringUtils.join(subtitleUnit.text, ""));
+     }
+     
+     @Test(expected = SubtitleEditorException.class)
+     public void testInsertSubtitleInvalidSubtitleNumber() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 4; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.insertSubtitle(subtitleData, 100, "00:00:24,600", "00:00:26,600",
++        SubtitleEditor.insertSubtitle(subtitleService, 100, "00:00:24,600", "00:00:26,600",
+             Arrays.asList("Foo100"));
+     }
+     
+     @Test
+     public void testPrepend() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 3; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.prependSubtitle(subtitleData, "00:00:24,600", "00:00:26,600",
++        SubtitleEditor.prependSubtitle(subtitleService, "00:00:24,600", "00:00:26,600",
+             Arrays.asList("Foo100"));
+         
+-        assertEquals(4, subtitleData.size());
+-        SubtitleUnit subtitleUnit = subtitleData.get(1);
++        assertEquals(4, subtitleService.size());
++        SubtitleUnit subtitleUnit = subtitleService.get(1);
+         assertEquals("Foo100", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(2);
++        subtitleUnit = subtitleService.get(2);
+         assertEquals("Foo1", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(3);
++        subtitleUnit = subtitleService.get(3);
+         assertEquals("Foo2", StringUtils.join(subtitleUnit.text, ""));
+         
+-        subtitleUnit = subtitleData.get(4);
++        subtitleUnit = subtitleService.get(4);
+         assertEquals("Foo3", StringUtils.join(subtitleUnit.text, ""));
+     }
+     
+     @Test
+     public void testUpdateSubtitle() throws Exception {
+-        SubtitleData subtitleData = new SubtitleData();
++        SubtitleService subtitleService = new SubtitleService();
+         for (int i = 1; i <= 4; i++) {
+-            subtitleData.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
++            subtitleService.add(new SubtitleUnit(i, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "Foo" + i));
+         }
+-        SubtitleEditor.updateSubtitle(subtitleData,
++        SubtitleEditor.updateSubtitle(subtitleService,
+             new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:26,600"), "test"));
+         
+-        SubtitleUnit s = subtitleData.get(2);
++        SubtitleUnit s = subtitleService.get(2);
+         assertEquals("test", StringUtils.join(s.text, ""));
+     }
+ }
+Index: src/main/java/org/gio/submaster/editor/SubtitleEditor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/gio/submaster/editor/SubtitleEditor.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/main/java/org/gio/submaster/editor/SubtitleEditor.java	(revision )
+@@ -1,7 +1,7 @@
+ package org.gio.submaster.editor;
+ 
+ import org.gio.submaster.api.SRTTime;
+-import org.gio.submaster.api.SubtitleData;
++import org.gio.submaster.api.SubtitleService;
+ import org.gio.submaster.api.SubtitleFormatter;
+ import org.gio.submaster.api.SubtitleUnit;
+ import org.gio.submaster.exception.SubtitleEditorException;
+@@ -21,15 +21,15 @@
+     }
+     
+     /**
+-     * Updates time of the SubtitleUnit object in the SubtitleData object. This method will
++     * Updates time of the SubtitleUnit object in the SubtitleService object. This method will
+      * update both start time and end time.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param subtitleNumber the subtitle number
+      * @param type the subtitle time format type
+      * @param value the time value
+      */
+-    public static void updateTime(SubtitleData info, int subtitleNumber,
++    public static void updateTime(SubtitleService info, int subtitleNumber,
+                                   SubtitleFormatter.Type type, int value) {
+         if (!info.contains(subtitleNumber)) {
+             throw new SubtitleEditorException(subtitleNumber + " could not be found");
+@@ -38,14 +38,14 @@
+     }
+     
+     /**
+-     * Updates all times of the SubtitleUnit objects in the SubtitleData object. This method will
++     * Updates all times of the SubtitleUnit objects in the SubtitleService object. This method will
+      * update both start time and end time.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param type the SubtitleUnit time object
+      * @param value the time value
+      */
+-    public static void updateTimes(SubtitleData info, SubtitleFormatter.Type type, int value) {
++    public static void updateTimes(SubtitleService info, SubtitleFormatter.Type type, int value) {
+         for (int i = 1; i <= info.size(); i++) {
+             updateTime(info, info.get(i).number, type, value);
+         }
+@@ -86,11 +86,11 @@
+     /**
+      * Updates a subtitle text according to the width given.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param subtitleNumber the subtitle number
+      * @param width the width (number of characters per subtitle line)
+      */
+-    public static void updateText(SubtitleData info, int subtitleNumber, int width) {
++    public static void updateText(SubtitleService info, int subtitleNumber, int width) {
+         if (!info.contains(subtitleNumber)) {
+             throw new SubtitleEditorException(subtitleNumber + " could not be found");
+         }
+@@ -100,10 +100,10 @@
+     /**
+      * Updates all subtitle texts according to the width given.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param width the width (number of characters per subtitle line)
+      */
+-    public static void updateTexts(SubtitleData info, int width) {
++    public static void updateTexts(SubtitleService info, int width) {
+         for (int i = 1; i <= info.size(); i++) {
+             updateText(info, info.get(i).number, width);
+         }
+@@ -141,14 +141,14 @@
+     }
+     
+     /**
+-     * Appends a new subtitle into SubtitleData.
++     * Appends a new subtitle into SubtitleService.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param startTime the start time
+      * @param endTime the end time
+      * @param text the subtitle text
+      */
+-    public static void appendSubtitle(SubtitleData info, String startTime,
++    public static void appendSubtitle(SubtitleService info, String startTime,
+                                       String endTime, List<String> text) {
+         try {
+             SubtitleUnit newSubtitleUnit = new SubtitleUnit(
+@@ -163,33 +163,33 @@
+     }
+     
+     /**
+-     * Prepends the subtitle into SubtitleData object.
++     * Prepends the subtitle into SubtitleService object.
+      * 
+      * This operation is very expensive since it needs to update all the subtitle
+      * numbers.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param startTime the start time
+      * @param endTime the end time
+      * @param text the subtitle text
+      */
+-    public static void prependSubtitle(SubtitleData info, String startTime,
++    public static void prependSubtitle(SubtitleService info, String startTime,
+                                        String endTime, List<String> text) {
+         insertSubtitle(info, 1, startTime, endTime, text);
+     }
+     
+     /**
+-     * Inserts the subtitle into SubtitleData object. All the subsequent subtitle
++     * Inserts the subtitle into SubtitleService object. All the subsequent subtitle
+      * numbers after the new subtitle that is going to be inserted will be
+      * updated.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param subtitleNumber the subtitle number
+      * @param startTime the start time
+      * @param endTime the end time
+      * @param text the subtitle text
+      */
+-    public static void insertSubtitle(SubtitleData info, int subtitleNumber,
++    public static void insertSubtitle(SubtitleService info, int subtitleNumber,
+                                       String startTime, String endTime, List<String> text) {
+         if (!info.contains(subtitleNumber)) {
+             throw new SubtitleEditorException(subtitleNumber + " could not be found");
+@@ -209,14 +209,14 @@
+     }
+     
+     /**
+-     * Inserts the subtitle into SubtitleData object. All the subsequent subtitle
++     * Inserts the subtitle into SubtitleService object. All the subsequent subtitle
+      * numbers after the new subtitle that is going to be inserted will be
+      * updated.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param newSubtitleUnit the new SubtitleUnit
+      */
+-    public static void insertSubtitle(SubtitleData info, SubtitleUnit newSubtitleUnit) {
++    public static void insertSubtitle(SubtitleService info, SubtitleUnit newSubtitleUnit) {
+         for (int i = info.size(); i >= newSubtitleUnit.number; i--) {
+             SubtitleUnit tmp = info.get(i);
+             info.add(new SubtitleUnit(tmp.number+1, tmp.startTime, tmp.endTime, tmp.text));
+@@ -226,14 +226,14 @@
+     }
+     
+     /**
+-     * Removes the subtitle from SubtitleData object. This method will update
++     * Removes the subtitle from SubtitleService object. This method will update
+      * all the subsequent subtitle numbers after the subtitle number that is
+      * going to be removed.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param subtitleNumber the subtitle number to be removed
+      */
+-    public static void removeSubtitle(SubtitleData info, int subtitleNumber) {
++    public static void removeSubtitle(SubtitleService info, int subtitleNumber) {
+         if (!info.contains(subtitleNumber)) {
+             throw new SubtitleEditorException(subtitleNumber + " could not be found");
+         }
+@@ -248,12 +248,12 @@
+     }
+     
+     /**
+-     * Updates the subtitle from the SubtitleData object.
++     * Updates the subtitle from the SubtitleService object.
+      * 
+-     * @param info the SubtitleData object
++     * @param info the SubtitleService object
+      * @param subtitleUnit the SubtitleUnit object
+      */
+-    public static void updateSubtitle(SubtitleData info, SubtitleUnit subtitleUnit) {
++    public static void updateSubtitle(SubtitleService info, SubtitleUnit subtitleUnit) {
+         info.add(subtitleUnit);
+     }
+ }
+Index: src/test/java/org/gio/submaster/api/SubtitleWriterTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/org/gio/submaster/api/SubtitleWriterTest.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/test/java/org/gio/submaster/api/SubtitleWriterTest.java	(revision )
+@@ -17,7 +17,7 @@
+     
+     @Test
+     public void testWrite() throws Exception {
+-        SubtitleData inInfo = new SubtitleData();
++        SubtitleService inInfo = new SubtitleService();
+         inInfo.add(new SubtitleUnit(2, SubtitleFormatter.stringToSrt("00:00:24,600"),
+                 SubtitleFormatter.stringToSrt("00:00:27,800"), "Foo Bar", "Bar Foo"));
+         inInfo.add(new SubtitleUnit(1, SubtitleFormatter.stringToSrt("00:00:20,000"),
+@@ -26,7 +26,7 @@
+         File srtFile = new File("src/test/resources/test1.srt");
+         SubtitleWriter.write(srtFile, inInfo);
+         
+-        SubtitleData outInfo = SubtitleReader.read(srtFile);
++        SubtitleService outInfo = SubtitleReader.read(srtFile);
+         assertEquals(inInfo.size(), outInfo.size());
+         Iterator<SubtitleUnit> inIter = inInfo.iterator();
+         Iterator<SubtitleUnit> outIter = outInfo.iterator();
+Index: src/main/java/org/gio/submaster/api/SubtitleReader.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/gio/submaster/api/SubtitleReader.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/main/java/org/gio/submaster/api/SubtitleReader.java	(revision )
+@@ -14,40 +14,56 @@
+ 
+ /**
+  * This class is responsible for reading an SubtitleUnit file.
+- * 
+- *
+  */
+ public class SubtitleReader {
++    private static SubtitleService subtitleService;
++
+     /**
+      * Reads a srt file and transforms it into SubtitleUnit object.
+-     * 
++     *
+      * @param srtFile SubtitleUnit file
+-     * @return the SubtitleData object
++     * @return the SubtitleService object
+      * @throws InvalidSubtitleLineException thrown when the SubtitleUnit file is invalid
+-     * @throws SubtitleReaderException thrown while reading SubtitleUnit file
++     * @throws SubtitleReaderException      thrown while reading SubtitleUnit file
+      */
+-    public static SubtitleData read(File srtFile) throws InvalidSubtitleLineException, SubtitleReaderException {
++    public static void read(SubtitleService subtitleService, File srtFile) throws InvalidSubtitleLineException, SubtitleReaderException {
++        SubtitleReader.subtitleService = subtitleService;
++        read(srtFile);
++    }
++
++
++    /**
++     * Reads a srt file and transforms it into SubtitleUnit object.
++     *
++     * @param srtFile SubtitleUnit file
++     * @return the SubtitleService object
++     * @throws InvalidSubtitleLineException thrown when the SubtitleUnit file is invalid
++     * @throws SubtitleReaderException      thrown while reading SubtitleUnit file
++     */
++    public static SubtitleService read(File srtFile) throws InvalidSubtitleLineException, SubtitleReaderException {
+         if (!srtFile.exists()) {
+             throw new SubtitleReaderException(srtFile.getAbsolutePath() + " does not exist");
+         }
+         if (!srtFile.isFile()) {
+             throw new SubtitleReaderException(srtFile.getAbsolutePath() + " is not a regular file");
+         }
+-        
++
+-        SubtitleData subtitleData = new SubtitleData();
++        if (subtitleService == null) {
++            subtitleService = new SubtitleService();
++        }
+         try (BufferedReader br = new BufferedReader(new FileReader(srtFile))) {
+             while (true) {
+-                subtitleData.add(parse(br));
++                subtitleService.add(parse(br));
+             }
+         } catch (EOFException e) {
+             // Do nothing
+         } catch (IOException e) {
+             throw new SubtitleReaderException(e);
+         }
+-        
++
+-        return subtitleData;
++        return subtitleService;
+     }
+-    
++
+     private static SubtitleUnit parse(BufferedReader br) throws IOException, EOFException {
+         String nString = br.readLine();
+         if (nString == null) {
+@@ -60,25 +76,25 @@
+             subtitleNumber = Integer.parseInt(nString);
+         } catch (NumberFormatException e) {
+             throw new InvalidSubtitleLineException(
+-                nString + " has an invalid subtitle number");
++                    nString + " has an invalid subtitle number");
+         }
+-        
++
+         String tString = br.readLine();
+         if (tString == null) {
+             throw new InvalidSubtitleLineException(
+-                "Start time and end time information is not present");
++                    "Start time and end time information is not present");
+         }
+         String[] times = tString.split(SubtitleFormatter.TIME_DELIMITER);
+         if (times.length != 2) {
+             throw new InvalidSubtitleLineException(
+-                tString + " needs to be seperated with " + SubtitleFormatter.TIME_DELIMITER);
++                    tString + " needs to be seperated with " + SubtitleFormatter.TIME_DELIMITER);
+         }
+         SRTTime startTime;
+         try {
+             startTime = SubtitleFormatter.stringToSrt(times[0]);
+         } catch (ParseException e) {
+             throw new InvalidSubtitleLineException(
+-                times[0] + " has an invalid time format");
++                    times[0] + " has an invalid time format");
+         }
+ 
+         SRTTime endTime = null;
+@@ -86,9 +102,9 @@
+             endTime = SubtitleFormatter.stringToSrt(times[1]);
+         } catch (ParseException e) {
+             throw new InvalidSubtitleLineException(
+-                times[1] + " has an invalid time format");
++                    times[1] + " has an invalid time format");
+         }
+-        
++
+         List<String> subtitleLines = new ArrayList<>();
+         String line;
+         while ((line = br.readLine()) != null) {
+@@ -97,11 +113,11 @@
+             }
+             subtitleLines.add(line);
+         }
+-        
++
+         if (subtitleLines.size() == 0) {
+             throw new InvalidSubtitleLineException("Missing subtitle text information");
+         }
+-        
++
+         return new SubtitleUnit(subtitleNumber, startTime, endTime, subtitleLines);
+     }
+ }
+Index: src/main/java/org/gio/submaster/api/SubtitleWriter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/gio/submaster/api/SubtitleWriter.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/main/java/org/gio/submaster/api/SubtitleWriter.java	(revision )
+@@ -20,12 +20,12 @@
+      * Writes a srt file from an SubtitleUnit object.
+      * 
+      * @param srtFile the srt file
+-     * @param subtitleData the SubtitleData object
++     * @param subtitleService the SubtitleService object
+      * @throws SubtitleWriterException thrown while writing an SubtitleUnit file
+      */
+-    public static void write(File srtFile, SubtitleData subtitleData) throws SubtitleWriterException, ParseException {
++    public static void write(File srtFile, SubtitleService subtitleService) throws SubtitleWriterException, ParseException {
+         try (PrintWriter pw = new PrintWriter(srtFile)) {
+-            for (SubtitleUnit subtitleUnit : subtitleData) {
++            for (SubtitleUnit subtitleUnit : subtitleService) {
+                 pw.println(subtitleUnit.number);
+                 pw.println(
+                     subtitleUnit.startTime.toString() +
+Index: src/test/java/org/gio/submaster/api/SubtitleReaderTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/org/gio/submaster/api/SubtitleReaderTest.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/test/java/org/gio/submaster/api/SubtitleReaderTest.java	(revision )
+@@ -16,10 +16,10 @@
+ 
+    @Test
+    public void testRead() throws Exception {
+-       SubtitleData subtitleData = SubtitleReader.read(new File("src/test/resources/good1.srt"));
++       SubtitleService subtitleService = SubtitleReader.read(new File("src/test/resources/good1.srt"));
+        
+-       assertEquals(2, subtitleData.size());
+-       Iterator<SubtitleUnit> iter = subtitleData.iterator();
++       assertEquals(2, subtitleService.size());
++       Iterator<SubtitleUnit> iter = subtitleService.iterator();
+        SubtitleUnit subtitleUnit = iter.next();
+        assertEquals(1, subtitleUnit.number);
+        assertEquals("Hello World", subtitleUnit.text.get(0));
+@@ -37,7 +37,7 @@
+ 
+     @Test
+     public void testReadByTime() throws Exception {
+-        SubtitleData info = SubtitleReader.read(new File("src/test/resources/good2.srt"));
++        SubtitleService info = SubtitleReader.read(new File("src/test/resources/good2.srt"));
+ 
+         assertEquals(772, info.size());
+ 
+Index: src/main/java/org/gio/submaster/api/SubtitleData.java
+===================================================================
+--- src/main/java/org/gio/submaster/api/SubtitleData.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/main/java/org/gio/submaster/api/SubtitleService.java	(revision )
+@@ -2,6 +2,7 @@
+ 
+ import org.gio.submaster.editor.SubtitleEditor;
+ 
++import java.io.File;
+ import java.util.Iterator;
+ import java.util.TreeSet;
+ 
+@@ -11,34 +12,39 @@
+ /**
+  * This class stores collections of SubtitleUnit objects.
+  * 
+- * All the methods here perform low-level operations on SubtitleData object.
+- * If you need to perform high-level operations for editing the SubtitleData,
++ * All the methods here perform low-level operations on SubtitleService object.
++ * If you need to perform high-level operations for editing the SubtitleService,
+  * use {@link SubtitleEditor} instead.
+  * 
+  *
+  */
+-public class SubtitleData implements Iterable<SubtitleUnit>, Cloneable {
++public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
+     private final TreeSet<SubtitleUnit> info;
+     
+     /**
+-     * Creates a new instance of SubtitleData.
++     * Creates a new instance of SubtitleService.
+      */
+-    public SubtitleData() {
++    public SubtitleService() {
+         info = new TreeSet<>();
+     }
+-    
++
++    public SubtitleService(File subtitleFile) {
++        info = new TreeSet<>();
++        SubtitleReader.read(subtitleFile);
++    }
++    
+     /**
+-     * Creates a new instance of SubtitleData.
++     * Creates a new instance of SubtitleService.
+      * This constructor acts as a copy constructor.
+      * 
+-     * @param subtitleData the SubtitleData object
++     * @param subtitleService the SubtitleService object
+      */
+-    public SubtitleData(SubtitleData subtitleData) {
+-        info = new TreeSet<>(subtitleData.info);
++    public SubtitleService(SubtitleService subtitleService) {
++        info = new TreeSet<>(subtitleService.info);
+     }
+     
+     /**
+-     * Adds SubtitleUnit object into SubtitleData object. If SubtitleUnit object already exists, the old
++     * Adds SubtitleUnit object into SubtitleService object. If SubtitleUnit object already exists, the old
+      * SubtitleUnit object will be replaced with the new SubtitleUnit object.
+      * 
+      * @param subtitleUnit the SubtitleUnit object to be added
+@@ -56,27 +62,27 @@
+     }
+     
+     /**
+-     * Gets the number of SubtitleUnit objects stored in SubtitleData object.
++     * Gets the number of SubtitleUnit objects stored in SubtitleService object.
+      * 
+-     * @return the number of SubtitleUnit objects stored in SubtitleData object
++     * @return the number of SubtitleUnit objects stored in SubtitleService object
+      */
+     public int size() {
+         return info.size();
+     }
+     
+     /**
+-     * Removes the SubtitleUnit object from SubtitleData.
++     * Removes the SubtitleUnit object from SubtitleService.
+      * 
+-     * @param subtitleUnit the SubtitleUnit object to be removed from SubtitleData
++     * @param subtitleUnit the SubtitleUnit object to be removed from SubtitleService
+      */
+     public void remove(SubtitleUnit subtitleUnit) {
+         info.remove(subtitleUnit);
+     }
+     
+     /**
+-     * Removes the SubtitleUnit object with subtitle number from SubtitleData.
++     * Removes the SubtitleUnit object with subtitle number from SubtitleService.
+      * 
+-     * @param number the subtitle number to be removed from SubtitleData
++     * @param number the subtitle number to be removed from SubtitleService
+      */
+     public void remove(int number) {
+         info.remove(get(number));
+@@ -127,20 +133,20 @@
+     }
+     
+     /**
+-     * Check if the subtitle number is in the SubtitleData object.
++     * Check if the subtitle number is in the SubtitleService object.
+      * 
+      * @param number the subtitle number
+-     * @return true if the subtitle number is in the SubtitleData; false otherwise
++     * @return true if the subtitle number is in the SubtitleService; false otherwise
+      */
+     public boolean contains(int number) {
+         return info.contains(new SubtitleUnit(number, null, null, new String[]{}));
+     }
+     
+     /**
+-     * Check if the SubtitleUnit is in the SubtitleData object.
++     * Check if the SubtitleUnit is in the SubtitleService object.
+      * 
+      * @param subtitleUnit the SubtitleUnit object
+-     * @return true if the subtitle number is in the SubtitleData; false otherwise
++     * @return true if the subtitle number is in the SubtitleService; false otherwise
+      */
+     public boolean contains(SubtitleUnit subtitleUnit) {
+         return info.contains(subtitleUnit);
+@@ -151,6 +157,6 @@
+      */
+     @Override
+     public Object clone() {
+-        return new SubtitleData(this);
++        return new SubtitleService(this);
+     }
+ }
+\ No newline at end of file
+Index: src/test/java/org/gio/submaster/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/org/gio/submaster/Main.java	(revision 7e476c6f4f0ea791041f52fe6be42e3a2b1fdf55)
++++ src/test/java/org/gio/submaster/Main.java	(revision )
+@@ -4,15 +4,15 @@
+ import java.text.ParseException;
+ import java.util.Arrays;
+ 
++import org.gio.submaster.api.SubtitleService;
+ import org.gio.submaster.api.SubtitleUnit;
+-import org.gio.submaster.api.SubtitleData;
+ import org.gio.submaster.api.SubtitleReader;
+ import org.gio.submaster.api.SubtitleFormatter;
+ import org.gio.submaster.api.SubtitleWriter;
+ import org.gio.submaster.editor.SubtitleEditor;
+ 
+ public class Main {
+-    private static void print(SubtitleData info) throws ParseException {
++    private static void print(SubtitleService info) throws ParseException {
+         for (SubtitleUnit s : info) {
+             System.out.println("Number: " + s.number);
+             System.out.println("Start time: " + s.startTime);
+@@ -26,12 +26,12 @@
+     }
+     
+     private static void testRead() throws ParseException {
+-        SubtitleData info = SubtitleReader.read(new File("in.srt"));
++        SubtitleService info = SubtitleReader.read(new File("in.srt"));
+         print(info);
+     }
+     
+     private static void testWrite() throws ParseException {
+-        SubtitleData info = new SubtitleData();
++        SubtitleService info = new SubtitleService();
+         info.add(new SubtitleUnit(1, null, null, "Hello", "World"));
+         info.add(new SubtitleUnit(2, null, null, "Bye", "World"));
+         
+@@ -41,7 +41,7 @@
+     }
+     
+     private static void testEdit() throws ParseException {
+-        SubtitleData info = SubtitleReader.read(new File("in.srt"));
++        SubtitleService info = SubtitleReader.read(new File("in.srt"));
+         SubtitleEditor.updateText(info, 1, 10);
+         SubtitleEditor.updateTime(info, 1, SubtitleFormatter.Type.MILLISECOND, 100);
+         SubtitleEditor.prependSubtitle(info, "00:00:05,000", "00:00:07,000",
