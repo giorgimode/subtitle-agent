@@ -54,7 +54,6 @@ public class StringUtils {
 
     public static String[][] convertSubtitleUnit(List<String> lines) {
         SubtitleUnit subtitleUnit = new SubtitleUnit(0, null, null, lines);
-        String[][] subtitleWords = convertSubtitleUnit(subtitleUnit);
-        return subtitleWords;
+        return convertSubtitleUnit(subtitleUnit);
     }
 }
