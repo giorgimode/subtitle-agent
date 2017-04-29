@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sub-master.iml" filepath="$PROJECT_DIR$/sub-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/subtitleLine-master.iml" filepath="$PROJECT_DIR$/subtitleLine-master.iml" />
+      <module fileurl="file://D:\coding\workspace\projects\subtitle-agent\sub-master.iml" filepath="D:\coding\workspace\projects\subtitle-agent\sub-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/subtitle-agent.iml" filepath="$PROJECT_DIR$/subtitle-agent.iml" />
+      <module fileurl="file://D:\coding\workspace\projects\subtitle-agent\subtitleLine-master.iml" filepath="D:\coding\workspace\projects\subtitle-agent\subtitleLine-master.iml" />
     </modules>
   </component>
 </project>
