@@ -1,32 +1,20 @@
 package com.giorgimode.subtitle.api;
 
-public class SRTTime implements Comparable<SRTTime>{
-        private long hour;
-        private long minute;
-        private long second;
-        private long millisecond;
+import lombok.Getter;
 
-        public SRTTime(long hour, long minute, long second, long millisecond) {
-            this.updateHour(hour);
-            this.updateMinute(minute);
-            this.updateSecond(second);
-            this.updateMillisecond(millisecond);
-        }
+@SuppressWarnings("WeakerAccess")
+@Getter
+public class SRTTime implements Comparable<SRTTime> {
+    private long hour;
+    private long minute;
+    private long second;
+    private long millisecond;
 
-    public long getHour() {
-        return hour;
-    }
-
-    public long getMinute() {
-        return minute;
-    }
-
-    public long getSecond() {
-        return second;
-    }
-
-    public long getMillisecond() {
-        return millisecond;
+    public SRTTime(long hour, long minute, long second, long millisecond) {
+        this.updateHour(hour);
+        this.updateMinute(minute);
+        this.updateSecond(second);
+        this.updateMillisecond(millisecond);
     }
 
     public void updateHour(long hour) {
@@ -73,19 +61,29 @@ public class SRTTime implements Comparable<SRTTime>{
     }
 
     @Override
-    public int compareTo(SRTTime o){
-        if (getHour() > o.getHour()) return 1;
-        else if (getHour() < o.getHour()) return -1;
-        else {
-            if (getMinute() > o.getMinute()) return 1;
-            else if (getMinute() < o.getMinute()) return -1;
-            else {
-                if (getSecond() > o.getSecond()) return 1;
-                else if (getSecond() < o.getSecond()) return -1;
-                else {
-                    if (getMillisecond() > o.getMillisecond()) return 1;
-                    else if (getMillisecond() < o.getMillisecond()) return -1;
-                    else return 0;
+    public int compareTo(SRTTime o) {
+        if (getHour() > o.getHour()) {
+            return 1;
+        } else if (getHour() < o.getHour()) {
+            return -1;
+        } else {
+            if (getMinute() > o.getMinute()) {
+                return 1;
+            } else if (getMinute() < o.getMinute()) {
+                return -1;
+            } else {
+                if (getSecond() > o.getSecond()) {
+                    return 1;
+                } else if (getSecond() < o.getSecond()) {
+                    return -1;
+                } else {
+                    if (getMillisecond() > o.getMillisecond()) {
+                        return 1;
+                    } else if (getMillisecond() < o.getMillisecond()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }

@@ -1,27 +1,28 @@
 package com.giorgimode.subtitle.api;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * A class to store SubtitleUnit information.
- * 
- *
  */
+@Getter
 public class SubtitleUnit implements Comparable<SubtitleUnit> {
-    public final int number;
-    public final SRTTime startTime;
-    public final SRTTime endTime;
-    public final List<String> text;
+    private final int          number;
+    private final SRTTime      startTime;
+    private final SRTTime      endTime;
+    private final List<String> text;
 
     /**
      * Creates a new instance of SubtitleUnit.
      *
-     * @param number the subtitle number
+     * @param number    the subtitle number
      * @param startTime the start time
-     * @param endTime the end time
-     * @param text the subtitle text
+     * @param endTime   the end time
+     * @param text      the subtitle text
      */
     public SubtitleUnit(int number, SRTTime startTime, SRTTime endTime, String... text) {
         this.number = number;
@@ -33,10 +34,10 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
     /**
      * Creates a new instance of SubtitleUnit.
      *
-     * @param number the subtitle number
+     * @param number    the subtitle number
      * @param startTime the start time
-     * @param endTime the end time
-     * @param text the subtitle text
+     * @param endTime   the end time
+     * @param text      the subtitle text
      */
     public SubtitleUnit(int number, SRTTime startTime, SRTTime endTime, List<String> text) {
         this.number = number;
@@ -45,14 +46,11 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
         this.text = new ArrayList<>(text);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (number ^ (number >>> 32));
+        result = prime * result + (getNumber() ^ (getNumber() >>> 16));
         return result;
     }
 
@@ -61,16 +59,17 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         SubtitleUnit other = (SubtitleUnit) obj;
-        if (number != other.number)
-            return false;
-        return true;
+        return getNumber() == other.getNumber();
     }
 
     /**
@@ -78,19 +77,17 @@ public class SubtitleUnit implements Comparable<SubtitleUnit> {
      */
     @Override
     public int compareTo(SubtitleUnit o) {
-        if (startTime != null && o.startTime != null) {
-            return startTime.compareTo(o.startTime);
+        if (getStartTime() != null && o.getStartTime() != null) {
+            return getStartTime().compareTo(o.getStartTime());
         }
 
-        return  new Integer(number).compareTo(o.number);
+        return new Integer(getNumber()).compareTo(o.getNumber());
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("SubtitleUnit [number=").append(number).append(", startTime=")
-            .append(startTime).append(", endTime=").append(endTime).append(", text=")
-            .append(text).append("]");
-        return builder.toString();
+        return "SubtitleUnit [number=" + getNumber() + ", startTime="
+               + getStartTime() + ", endTime=" + getEndTime() + ", text="
+               + getText() + "]";
     }
 }

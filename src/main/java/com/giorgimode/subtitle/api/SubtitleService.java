@@ -1,7 +1,7 @@
 package com.giorgimode.subtitle.api;
 
 import com.giorgimode.subtitle.editor.SubtitleEditor;
-import com.giorgimode.subtitle.util.StringUtils;
+import com.giorgimode.subtitle.util.SubtitleUtils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import static com.giorgimode.subtitle.api.SubtitleFormatter.longToSrt;
  * If you need to perform high-level operations for editing the SubtitleService,
  * use {@link SubtitleEditor} instead.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
     private final TreeSet<SubtitleUnit> info;
 
@@ -121,7 +122,7 @@ public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
 
     public String[][] getCurrentWords(long timestamp) {
         SubtitleUnit subtitleUnit = get(timestamp);
-        return subtitleUnit != null ? StringUtils.convertSubtitleUnit(subtitleUnit) : new String[0][0];
+        return subtitleUnit != null ? SubtitleUtils.convertSubtitleUnit(subtitleUnit) : new String[0][0];
     }
 
     /**
@@ -141,7 +142,7 @@ public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
      * @return true if the subtitle number is in the SubtitleService; false otherwise
      */
     public boolean contains(int number) {
-        return info.contains(new SubtitleUnit(number, null, null, new String[]{}));
+        return info.contains(new SubtitleUnit(number, null, null));
     }
 
     /**
@@ -152,13 +153,5 @@ public class SubtitleService implements Iterable<SubtitleUnit>, Cloneable {
      */
     public boolean contains(SubtitleUnit subtitleUnit) {
         return info.contains(subtitleUnit);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object clone() {
-        return new SubtitleService(this);
     }
 }

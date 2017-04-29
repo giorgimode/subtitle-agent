@@ -1,14 +1,13 @@
 package com.giorgimode.subtitle.util;
 
-import static com.giorgimode.subtitle.util.StringUtils.convertSubtitleUnit;
-import static org.junit.Assert.*;
+import com.giorgimode.subtitle.api.SubtitleUnit;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.giorgimode.subtitle.api.SubtitleUnit;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -17,9 +16,9 @@ public class StringUtilsTest {
 
     @Test
     public void testJoin() {
-        assertEquals("Hello World", StringUtils.join(Arrays.asList("Hello", "World"), " "));
-        assertEquals(" World", StringUtils.join(Arrays.asList("", "World"), " "));
-        assertEquals("Hello ", StringUtils.join(Arrays.asList("Hello", ""), " "));
+        assertEquals("Hello World", SubtitleUtils.join(Arrays.asList("Hello", "World"), " "));
+        assertEquals(" World", SubtitleUtils.join(Arrays.asList("", "World"), " "));
+        assertEquals("Hello ", SubtitleUtils.join(Arrays.asList("Hello", ""), " "));
     }
 
     @Test
@@ -29,7 +28,7 @@ public class StringUtilsTest {
         lines.add("of the deep-rooted subconscious.");
         SubtitleUnit subtitleUnit = new SubtitleUnit(0, null, null, lines);
 
-        String[][] words = StringUtils.convertSubtitleUnit(subtitleUnit);
+        String[][] words = SubtitleUtils.convertSubtitleUnit(subtitleUnit);
         String[] line1 = words[0];
         assertEquals("We've", line1[0]);
         assertEquals("unlocked", line1[1]);

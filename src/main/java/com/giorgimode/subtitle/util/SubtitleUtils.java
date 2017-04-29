@@ -7,12 +7,12 @@ import java.util.List;
 /**
  * String utility functions.
  */
-public class StringUtils {
+public final class SubtitleUtils {
 
-    public static final String REGEX_SYNTAX_TAGS = "\\<.*?\\>";
-    public static final String REGEX_SPACE = "\\s+";
+    private static final String REGEX_SYNTAX_TAGS = "<.*?>";
+    private static final String REGEX_SPACE       = "\\s+";
 
-    private StringUtils() {
+    private SubtitleUtils() {
     }
 
     /**
@@ -34,7 +34,7 @@ public class StringUtils {
     }
 
     public static String[][] convertSubtitleUnit(SubtitleUnit subtitleUnit) {
-        List<String> subtitleLines = subtitleUnit.text;
+        List<String> subtitleLines = subtitleUnit.getText();
         int numberOfLines = subtitleLines.size();
         String[][] subtitleWords = new String[numberOfLines][];
         for (int i = 0; i < numberOfLines; i++) {

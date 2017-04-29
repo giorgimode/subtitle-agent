@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.util.Iterator;
 
-import com.giorgimode.subtitle.util.StringUtils;
+import com.giorgimode.subtitle.util.SubtitleUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,18 +22,18 @@ public class SubtitleServiceTest {
        assertEquals(2, subtitleService.size());
        Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
-       assertEquals(2, subtitleUnit.number);
-       assertEquals("00:00:03,567", subtitleUnit.startTime.toString());
-       assertEquals(null, subtitleUnit.endTime);
-       Assert.assertEquals("Bye World", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(2, subtitleUnit.getNumber());
+       assertEquals("00:00:03,567", subtitleUnit.getStartTime().toString());
+       assertEquals(null, subtitleUnit.getEndTime());
+       Assert.assertEquals("Bye World", SubtitleUtils.join(subtitleUnit.getText(), " "));
 
        // Treeset will order items automatically (by startTime, then by number)
        // Hence elements are reordered when added
        subtitleUnit = iter.next();
-       assertEquals(1, subtitleUnit.number);
-       assertEquals("00:00:15,120", subtitleUnit.startTime.toString());
-       assertEquals(null, subtitleUnit.endTime);
-       assertEquals("Foo Bar", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(1, subtitleUnit.getNumber());
+       assertEquals("00:00:15,120", subtitleUnit.getStartTime().toString());
+       assertEquals(null, subtitleUnit.getEndTime());
+       assertEquals("Foo Bar", SubtitleUtils.join(subtitleUnit.getText(), " "));
        
        assertFalse(iter.hasNext());
    }
@@ -51,16 +51,16 @@ public class SubtitleServiceTest {
        assertEquals(2, subtitleService.size());
        Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
-       assertEquals(1, subtitleUnit.number);
-       assertEquals(null, subtitleUnit.startTime);
-       assertEquals(null, subtitleUnit.endTime);
-       assertEquals("Foo Bar", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(1, subtitleUnit.getNumber());
+       assertEquals(null, subtitleUnit.getStartTime());
+       assertEquals(null, subtitleUnit.getEndTime());
+       assertEquals("Foo Bar", SubtitleUtils.join(subtitleUnit.getText(), " "));
        
        subtitleUnit = iter.next();
-       assertEquals(2, subtitleUnit.number);
-       assertEquals(null, subtitleUnit.startTime);
-       assertEquals(null, subtitleUnit.endTime);
-       assertEquals("Bye World", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(2, subtitleUnit.getNumber());
+       assertEquals(null, subtitleUnit.getStartTime());
+       assertEquals(null, subtitleUnit.getEndTime());
+       assertEquals("Bye World", SubtitleUtils.join(subtitleUnit.getText(), " "));
        
        assertFalse(iter.hasNext());
    }
@@ -86,14 +86,14 @@ public class SubtitleServiceTest {
        assertEquals(2, subtitleService.size());
        Iterator<SubtitleUnit> iter = subtitleService.iterator();
        SubtitleUnit subtitleUnit = iter.next();
-       assertEquals(1, subtitleUnit.number);
-       assertEquals("Foo Bar", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(1, subtitleUnit.getNumber());
+       assertEquals("Foo Bar", SubtitleUtils.join(subtitleUnit.getText(), " "));
        
        subtitleUnit = iter.next();
-       assertEquals(2, subtitleUnit.number);
-       assertEquals("00:00:00,000", subtitleUnit.startTime.toString());
-       assertEquals("00:00:00,005", subtitleUnit.endTime.toString());
-       assertEquals("Bye World", StringUtils.join(subtitleUnit.text, " "));
+       assertEquals(2, subtitleUnit.getNumber());
+       assertEquals("00:00:00,000", subtitleUnit.getStartTime().toString());
+       assertEquals("00:00:00,005", subtitleUnit.getEndTime().toString());
+       assertEquals("Bye World", SubtitleUtils.join(subtitleUnit.getText(), " "));
        
        assertFalse(iter.hasNext());
    }

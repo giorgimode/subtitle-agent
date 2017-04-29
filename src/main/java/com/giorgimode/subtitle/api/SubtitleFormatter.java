@@ -7,15 +7,14 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * This class contains utility methods for SubtitleUnit time format related stuff.
- *
- *
  */
-public class SubtitleFormatter {
-    public static final String TIME_DELIMITER = " --> ";
-    public static final String TIME_UNIT_DELIMITER = "[\\s\\:,]+";
-    public static final int MS_PER_HOUR = 3600000;
-    public static final int MS_PER_MIN = 60000;
-    public static final int MS_PER_SEC = 1000;
+@SuppressWarnings("WeakerAccess")
+public final class SubtitleFormatter {
+    public static final String TIME_DELIMITER      = " --> ";
+    public static final String TIME_UNIT_DELIMITER = "[\\s:,]+";
+    public static final int    MS_PER_HOUR         = 3600000;
+    public static final int    MS_PER_MIN          = 60000;
+    public static final int    MS_PER_SEC          = 1000;
 
     public enum Type {
         HOUR,
@@ -23,15 +22,17 @@ public class SubtitleFormatter {
         SECOND,
         MILLISECOND
     }
-    
+
     private SubtitleFormatter() {
     }
-    
+
     /**
      * Formats the date into SubtitleUnit time format.
+     *
      * @param timestamp the timestamp
      * @return the SubtitleUnit time format
      */
+    @SuppressWarnings("SameParameterValue")
     public static String longToString(long timestamp) throws ParseException {
         SRTTime srtTime = longToSrt(timestamp);
         return srtTime.toString();
@@ -45,7 +46,7 @@ public class SubtitleFormatter {
      */
     public static SRTTime longToSrt(long timestamp) {
         long hours = TimeUnit.MILLISECONDS.toHours(timestamp);
-        long minutes =  TimeUnit.MILLISECONDS.toMinutes(timestamp) % TimeUnit.HOURS.toMinutes(1);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timestamp) % TimeUnit.HOURS.toMinutes(1);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(timestamp) % TimeUnit.MINUTES.toSeconds(1);
         long mls = timestamp % MS_PER_SEC;
 
@@ -58,9 +59,10 @@ public class SubtitleFormatter {
 
     /**
      * Parses the SubtitleUnit time format into long timestamp.
+     *
      * @param srtTimeString the SubtitleUnit time format
      * @return the long timestamp
-     * @throws ParseException
+     * @throws ParseException parseException
      */
     public static SRTTime stringToSrt(String srtTimeString) throws ParseException {
         String[] times = srtTimeString.split(SubtitleFormatter.TIME_UNIT_DELIMITER);
@@ -78,7 +80,6 @@ public class SubtitleFormatter {
      *
      * @param srtTime the SRTTime
      * @return the Date
-     * @throws ParseException
      */
     public static long srtToLong(SRTTime srtTime) {
         long hours = srtTime.getHour();

@@ -33,18 +33,18 @@ public class SubtitleWriterTest {
         
         SubtitleUnit inSubtitleUnit = inIter.next();
         SubtitleUnit outSubtitleUnit = outIter.next();
-        assertEquals(inSubtitleUnit.number, outSubtitleUnit.number);
-        assertEquals(inSubtitleUnit.startTime.toString(), outSubtitleUnit.startTime.toString());
-        assertEquals(inSubtitleUnit.endTime.toString(), outSubtitleUnit.endTime.toString());
-        assertEquals(inSubtitleUnit.text.get(0), outSubtitleUnit.text.get(0));
-        assertEquals(inSubtitleUnit.text.get(1), outSubtitleUnit.text.get(1));
+        assertEquals(inSubtitleUnit.getNumber(), outSubtitleUnit.getNumber());
+        assertEquals(inSubtitleUnit.getStartTime().toString(), outSubtitleUnit.getStartTime().toString());
+        assertEquals(inSubtitleUnit.getEndTime().toString(), outSubtitleUnit.getEndTime().toString());
+        assertEquals(inSubtitleUnit.getText().get(0), outSubtitleUnit.getText().get(0));
+        assertEquals(inSubtitleUnit.getText().get(1), outSubtitleUnit.getText().get(1));
         
         inSubtitleUnit = inIter.next();
         outSubtitleUnit = outIter.next();
-        assertEquals(inSubtitleUnit.number, outSubtitleUnit.number);
-        assertEquals(inSubtitleUnit.startTime.toString(), outSubtitleUnit.startTime.toString());
-        assertEquals(inSubtitleUnit.endTime.toString(), outSubtitleUnit.endTime.toString());
-        assertEquals(inSubtitleUnit.text.get(0), outSubtitleUnit.text.get(0));
-        assertEquals(inSubtitleUnit.text.get(1), outSubtitleUnit.text.get(1));
+        assertEquals(inSubtitleUnit.getNumber(), outSubtitleUnit.getNumber());
+        assertEquals(inSubtitleUnit.getStartTime().toString(), outSubtitleUnit.getStartTime().toString());
+        assertEquals(inSubtitleUnit.getEndTime().toString(), outSubtitleUnit.getEndTime().toString());
+        assertEquals(inSubtitleUnit.getText().get(0), outSubtitleUnit.getText().get(0));
+        assertEquals(inSubtitleUnit.getText().get(1), outSubtitleUnit.getText().get(1));
     }
 }

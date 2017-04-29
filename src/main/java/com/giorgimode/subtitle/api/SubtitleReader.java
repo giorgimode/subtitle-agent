@@ -10,14 +10,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
  * This class is responsible for reading an SubtitleUnit file.
  */
-public class SubtitleReader {
+@SuppressWarnings("WeakerAccess")
+public final class SubtitleReader {
     /**
      * Reads a srt file and transforms it into SubtitleUnit object.
      *
@@ -33,7 +32,7 @@ public class SubtitleReader {
         if (!srtFile.isFile()) {
             throw new SubtitleReaderException(srtFile.getAbsolutePath() + " is not a regular file");
         }
-         try (BufferedReader br = new BufferedReader(new FileReader(srtFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(srtFile))) {
             while (true) {
                 subtitleService.add(parse(br));
             }
@@ -44,13 +43,13 @@ public class SubtitleReader {
         }
     }
 
-    private static SubtitleUnit parse(BufferedReader br) throws IOException, EOFException {
+    private static SubtitleUnit parse(BufferedReader br) throws IOException {
         String nString = br.readLine();
         if (nString == null) {
             throw new EOFException();
         }
 
-        int subtitleNumber = -1;
+        int subtitleNumber;
         try {
             nString = nString.replaceAll("[^\\d]", "");
             subtitleNumber = Integer.parseInt(nString);
@@ -77,7 +76,7 @@ public class SubtitleReader {
                     times[0] + " has an invalid time format");
         }
 
-        SRTTime endTime = null;
+        SRTTime endTime;
         try {
             endTime = SubtitleFormatter.stringToSrt(times[1]);
         } catch (ParseException e) {
@@ -99,5 +98,8 @@ public class SubtitleReader {
         }
 
         return new SubtitleUnit(subtitleNumber, startTime, endTime, subtitleLines);
+    }
+
+    private SubtitleReader() {
     }
 }
